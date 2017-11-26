@@ -1,0 +1,3 @@
+[submodule "sys/deepspeech"]
+	path = sys/deepspeech
+	url = https://github.com/mozilla/deepspeech

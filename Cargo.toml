@@ -1,0 +1,12 @@
+[package]
+name = "deepspeech"
+description = "Rust bindings to Mozilla's DeepSpeech STT implementation"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/RustAudio/deepspeech-rs"
+version = "0.0.1"
+authors = ["est31 <MTest31@outlook.com>"]
+
+[dependencies]
+libc = "0.2"
+deepspeech-sys = "0.0.1"
+#deepspeech-sys = { path = "sys" }
