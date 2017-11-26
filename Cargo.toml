@@ -9,5 +9,6 @@ authors = ["est31 <MTest31@outlook.com>"]
 
 [dependencies]
 libc = "0.2"
-deepspeech-sys = "0.0.1"
-#deepspeech-sys = { path = "sys" }
+#deepspeech-sys = "0.0.1"
+deepspeech-sys = { path = "sys" }
+audrey = "0.1"
