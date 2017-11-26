@@ -18,6 +18,10 @@ const LM_WEIGHT :f32 = 1.75;
 const WORD_COUNT_WEIGHT :f32 = 1.0;
 const VALID_WORD_COUNT_WEIGHT :f32 = 1.0;
 
+// The model has been trained on this specific
+// sample rate.
+const SAMPLE_RATE :u32 = 16_000;
+
 /*
 TODO list:
 * resampling
@@ -47,11 +51,15 @@ fn main() {
 	let desc = reader.description();
 	assert_eq!(1, desc.channel_count(),
 		"The channel count is required to be one, at least for now");
-	assert_eq!(16000, desc.sample_rate(),
-		"The sample rate is required to be 16kHz, at least for now");
+	assert_eq!(SAMPLE_RATE, desc.sample_rate(),
+		"The sample rate is required to be {} Hz, at least for now", SAMPLE_RATE);
+
+	// Obtain the buffer of samples
 	let audio_buf = reader.samples().map(|s| s.unwrap()).collect::<Vec<_>>();
-	let result = m.stt(
-		&audio_buf,
-		desc.sample_rate()).unwrap();
+
+	// Run the speech to text algorithm
+	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
+
+	// Output the result
 	println!("{}", result);
 }

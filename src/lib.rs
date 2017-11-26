@@ -63,8 +63,11 @@ impl Model {
 
 	/// Perform speech-to-text using the model
 	///
-	/// The input buffer must consist of mono 16-bit samples
-	pub fn stt(&mut self, buffer :&[i16], sample_rate :u32) -> Result<String, std::string::FromUtf8Error> {
+	/// The input buffer must consist of mono 16-bit samples.
+	/// The sample rate is not freely chooseable but a property
+	/// of the model files.
+	pub fn speech_to_text(&mut self, buffer :&[i16],
+			sample_rate :u32) -> Result<String, std::string::FromUtf8Error> {
 		let r = unsafe {
 			let ptr = self.model.stt(buffer.as_ptr(),
 				buffer.len() as _, sample_rate as _);
