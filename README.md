@@ -29,7 +29,7 @@ It will print out the recognized sequence on stdout. The format of the audio fil
 All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) library supports are supported.
 The [0.1.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.1.0) has a detailed list of requirements.
 
-Note: [Right now](https://github.com/mozilla/DeepSpeech/issues/1023), there are no precompiled binaries for older CPU platforms like Ivy Bridge.
+Note: [Right now](https://github.com/mozilla/DeepSpeech/issues/1023), there are no Linux x64 binaries for older CPU platforms without AVX2 support like Ivy Bridge.
 See DeepSpeech's [0.1.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.1.0) for a list of supported platforms.
 
 ## Supported versions of DeepSpeech
