@@ -2,6 +2,7 @@
 name = "deepspeech-sys"
 description = "Bindgen output for the DeepSpeech C++ API"
 license = "MPL-2.0"
+documentation = "https://docs.rs/deepspeech"
 repository = "https://github.com/RustAudio/deepspeech-rs"
 version = "0.0.1"
 authors = ["est31 <MTest31@outlook.com>"]
