@@ -2,6 +2,8 @@
 
 Rust bindings of [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech) library.
 
+The library is open source and performs Speech-To-Text completely offline. Mozilla provides pretrained models for English.
+
 ## License
 
 Licensed under Apache 2 or MIT (at your option). For details, see the [LICENSE](LICENSE) file.
