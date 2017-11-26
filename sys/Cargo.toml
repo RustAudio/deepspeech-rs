@@ -7,7 +7,7 @@ version = "0.0.1"
 authors = ["est31 <MTest31@outlook.com>"]
 
 include = ["deepspeech/native_client/**/*.h", "/src/**",
-	"/build.rs", "/LICENSE"]
+	"/build.rs", "/LICENSE", "Cargo.toml"]
 
 [dependencies]
 
