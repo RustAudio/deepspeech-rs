@@ -6,7 +6,7 @@ repository = "https://github.com/RustAudio/deepspeech-rs"
 version = "0.0.1"
 authors = ["est31 <MTest31@outlook.com>"]
 
-include = ["deepspeech/native_client/**/*.h", "/src/**",
+include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]
 
 [dependencies]
