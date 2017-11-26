@@ -26,8 +26,8 @@ cargo run --release --example client <path-to-model-dir> <path-to-audio-file>
 ```
 
 It will print out the recognized sequence on stdout. The format of the audio files is important: they need to have a sample rate of 16 kHz and the stream must be mono.
-All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) library supports are supported.
 The [0.1.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.1.0) has a detailed list of requirements.
+All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) library supports are supported.
 
 Note: [Right now](https://github.com/mozilla/DeepSpeech/issues/1023), there are no Linux x64 binaries for older CPU platforms without AVX2 support like Ivy Bridge.
 See DeepSpeech's [0.1.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.1.0) for a list of supported platforms.
