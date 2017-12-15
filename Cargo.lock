@@ -131,13 +131,13 @@ name = "deepspeech"
 version = "0.0.1"
 dependencies = [
  "audrey 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "deepspeech-sys 0.0.1",
+ "deepspeech-sys 0.0.2",
  "libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "deepspeech-sys"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "bindgen 0.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
