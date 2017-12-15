@@ -131,13 +131,14 @@ name = "deepspeech"
 version = "0.0.1"
 dependencies = [
  "audrey 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "deepspeech-sys 0.0.2",
+ "deepspeech-sys 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "deepspeech-sys"
 version = "0.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bindgen 0.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -372,6 +373,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum clang-sys 0.21.1 (registry+https://github.com/rust-lang/crates.io-index)" = "00048189ee171715296dfe3b2fcfd439563c7bfec0d98d3976ce3402d62c8f07"
 "checksum clap 2.27.1 (registry+https://github.com/rust-lang/crates.io-index)" = "1b8c532887f1a292d17de05ae858a8fe50a301e196f9ef0ddb7ccd0d1d00f180"
 "checksum claxon 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ea4ed046a8729cabb48e3574522bff437d951fa16bf3d5a0993ca54f69b893ab"
+"checksum deepspeech-sys 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)" = "2d3c95aabaa32e477ca9ef57406c426e3d32aa4e9073707f1dc3047e740b259a"
 "checksum env_logger 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)" = "3ddf21e73e016298f5cb37d6ef8e8da8e39f91f9ec8b0df44b7deb16a9f8cd5b"
 "checksum glob 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)" = "8be18de09a56b60ed0edf84bc9df007e30040691af7acd1c41874faac5895bfb"
 "checksum hound 3.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8781eeae4692901cfcd2ea111de1d723ce368afb7f59b7e7e5c2ebd609782bb9"
