@@ -7,6 +7,8 @@ use std::fs::File;
 
 use deepspeech::Model;
 use audrey::read::Reader;
+use audrey::sample::interpolate::{Converter, Linear};
+use audrey::sample::signal::{from_iter, Signal};
 
 // These constants are taken from the C++ sources of the client.
 
@@ -51,11 +53,20 @@ fn main() {
 	let desc = reader.description();
 	assert_eq!(1, desc.channel_count(),
 		"The channel count is required to be one, at least for now");
-	assert_eq!(SAMPLE_RATE, desc.sample_rate(),
-		"The sample rate is required to be {} Hz, at least for now", SAMPLE_RATE);
 
 	// Obtain the buffer of samples
-	let audio_buf = reader.samples().map(|s| s.unwrap()).collect::<Vec<_>>();
+	let audio_buf :Vec<_> = if desc.sample_rate() == SAMPLE_RATE {
+		reader.samples().map(|s| s.unwrap()).collect::<Vec<_>>()
+	} else {
+		// We need to interpolate to the target sample rate
+		let interpolator = Linear::new([0i16], [0]);
+		let conv = Converter::from_hz_to_hz(
+			from_iter(reader.samples::<i16>().map(|s| [s.unwrap()])),
+			interpolator,
+			desc.sample_rate() as f64,
+			SAMPLE_RATE as f64);
+		conv.until_exhausted().map(|v| v[0]).collect::<Vec<_>>()
+	};
 
 	// Run the speech to text algorithm
 	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
