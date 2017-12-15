@@ -8,7 +8,7 @@ version = "0.0.1"
 authors = ["est31 <MTest31@outlook.com>"]
 
 [dev-dependencies]
-audrey = "0.1"
+audrey = "0.2"
 
 [dependencies]
 libc = "0.2"
