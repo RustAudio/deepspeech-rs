@@ -25,7 +25,7 @@ You can now invoke the example via:
 cargo run --release --example client <path-to-model-dir> <path-to-audio-file>
 ```
 
-It will print out the recognized sequence on stdout. The format of the audio files is important: they need to have a sample rate of 16 kHz and the stream must be mono.
+It will print out the recognized sequence on stdout. The format of the audio files is important: only mono files are supported for now.
 The [0.1.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.1.0) has a detailed list of requirements.
 All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) library supports are supported.
 
