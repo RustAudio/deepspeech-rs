@@ -26,7 +26,8 @@ const SAMPLE_RATE :u32 = 16_000;
 
 /*
 TODO list:
-* resampling
+* better resampling (right now it seems that recognition is impaired compared to manual resampling)...
+  maybe use sinc?
 * channel cropping
 * use clap or something to parse the command line arguments
 */
