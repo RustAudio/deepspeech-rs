@@ -10,7 +10,7 @@ use std::path::Path;
 use std::ops::Drop;
 use std::ptr;
 use libc::free;
-use deepspeech_sys::root as ds;
+use deepspeech_sys as ds;
 
 pub struct Model {
 	model :* mut ds::ModelState,

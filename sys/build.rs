@@ -8,7 +8,6 @@ fn main() {
 	println!("cargo:rustc-link-lib=ctc_decoder_with_kenlm");
 
 	let bindings = bindgen::Builder::default()
-		.enable_cxx_namespaces()
 		.header("stddef.h")
 		.header("deepspeech/native_client/deepspeech.h")
 		.clang_args(&["-x", "c++", "-std=c++11"])
