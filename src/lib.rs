@@ -152,7 +152,7 @@ impl Stream {
 		return self.finish_priv();
 	}
 
-	pub fn finish_priv(&mut self) -> Result<String, std::string::FromUtf8Error> {
+	fn finish_priv(&mut self) -> Result<String, std::string::FromUtf8Error> {
 		let r = unsafe {
 			let ptr = ds::DS_FinishStream(self.stream);
 			let s = CStr::from_ptr(ptr);
