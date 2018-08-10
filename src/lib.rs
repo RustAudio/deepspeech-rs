@@ -131,7 +131,7 @@ impl Stream {
 		}
 	}
 
-	/// Decodes the intermediate state of what has been said up until now
+	/// Decodes the intermediate state of what has been spoken up until now
 	///
 	/// Note that as of DeepSpeech version 0.2.0,
 	/// this function is non-trivial as the decoder can't do streaming yet.
@@ -147,7 +147,7 @@ impl Stream {
 		String::from_utf8(r)
 	}
 
-	/// Deallocates the stream
+	/// Deallocates the stream and returns the decoded text
 	pub fn finish(mut self) -> Result<String, std::string::FromUtf8Error> {
 		return self.finish_priv();
 	}
