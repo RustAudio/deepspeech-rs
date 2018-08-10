@@ -167,6 +167,8 @@ impl Stream {
 
 impl Drop for Stream {
 	fn drop(&mut self) {
-		self.finish_priv().unwrap();
+		unsafe {
+			ds::DS_DiscardStream(self.stream);
+		}
 	}
 }
