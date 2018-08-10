@@ -17,7 +17,6 @@ const N_CONTEXT :u16 = 9;
 const BEAM_WIDTH :u16 = 500;
 
 const LM_WEIGHT :f32 = 1.75;
-const WORD_COUNT_WEIGHT :f32 = 1.0;
 const VALID_WORD_COUNT_WEIGHT :f32 = 1.0;
 
 // The model has been trained on this specific
@@ -32,21 +31,22 @@ TODO list:
 * use clap or something to parse the command line arguments
 */
 fn main() {
-	let model_dir_str = args().nth(1).unwrap();
-	let audio_file_path = args().nth(2).unwrap();
+	let model_dir_str = args().nth(1)
+		.expect("Please specify model dir");
+	let audio_file_path = args().nth(2)
+		.expect("Please specify an audio file to run STT on");
 	let dir_path = Path::new(&model_dir_str);
 	let mut m = Model::load_from_files(
 		&dir_path.join("output_graph.pb"),
 		N_CEP,
 		N_CONTEXT,
 		&dir_path.join("alphabet.txt"),
-		BEAM_WIDTH);
+		BEAM_WIDTH).unwrap();
 	m.enable_decoder_with_lm(
 		&dir_path.join("alphabet.txt"),
 		&dir_path.join("lm.binary"),
 		&dir_path.join("trie"),
 		LM_WEIGHT,
-		WORD_COUNT_WEIGHT,
 		VALID_WORD_COUNT_WEIGHT);
 
 	let audio_file = File::open(audio_file_path).unwrap();
