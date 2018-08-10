@@ -88,6 +88,25 @@ impl Model {
 		};
 		String::from_utf8(r)
 	}
+
+	/// Set up a state for streaming inference
+	pub fn setup_stream(&mut self, pre_alloc_frames :u32, sample_rate :u32) -> Result<Stream, ()> {
+		let mut ptr = ptr::null_mut();
+		let ret = unsafe {
+			ds::DS_SetupStream(
+				self.model,
+				pre_alloc_frames as _,
+				sample_rate as _,
+				&mut ptr,
+			)
+		};
+		if ret != 0 {
+			return Err(());
+		}
+		Ok(Stream {
+			stream : ptr
+		})
+	}
 }
 
 impl Drop for Model {
@@ -95,5 +114,59 @@ impl Drop for Model {
 		unsafe {
 			ds::DS_DestroyModel(self.model);
 		}
+	}
+}
+
+pub struct Stream {
+	stream :* mut ds::StreamingState,
+}
+
+impl Stream {
+	/// Feed audio samples to the stream
+	///
+	/// The input buffer must consist of mono 16-bit samples.
+	pub fn feed_audio(&mut self, buffer :&[i16]) {
+		unsafe {
+			ds::DS_FeedAudioContent(self.stream, buffer.as_ptr(), buffer.len() as _);
+		}
+	}
+
+	/// Decodes the intermediate state of what has been said up until now
+	///
+	/// Note that as of DeepSpeech version 0.2.0,
+	/// this function is non-trivial as the decoder can't do streaming yet.
+	pub fn intermediate_decode(&mut self) -> Result<String, std::string::FromUtf8Error> {
+		let r = unsafe {
+			let ptr = ds::DS_IntermediateDecode(self.stream);
+			let s = CStr::from_ptr(ptr);
+			let mut v = Vec::new();
+			v.extend_from_slice(s.to_bytes());
+			free(ptr as _);
+			v
+		};
+		String::from_utf8(r)
+	}
+
+	/// Deallocates the stream
+	pub fn finish(mut self) -> Result<String, std::string::FromUtf8Error> {
+		return self.finish_priv();
+	}
+
+	pub fn finish_priv(&mut self) -> Result<String, std::string::FromUtf8Error> {
+		let r = unsafe {
+			let ptr = ds::DS_FinishStream(self.stream);
+			let s = CStr::from_ptr(ptr);
+			let mut v = Vec::new();
+			v.extend_from_slice(s.to_bytes());
+			free(ptr as _);
+			v
+		};
+		String::from_utf8(r)
+	}
+}
+
+impl Drop for Stream {
+	fn drop(&mut self) {
+		self.finish_priv().unwrap();
 	}
 }
