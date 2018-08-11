@@ -9,6 +9,7 @@ use std::ffi::CStr;
 use std::path::Path;
 use std::ops::Drop;
 use std::ptr;
+use std::mem::forget;
 use libc::free;
 use deepspeech_sys as ds;
 
@@ -157,6 +158,9 @@ impl Stream {
 			free(ptr as _);
 			v
 		};
+		// Don't run the destructor for self,
+		// as DS_FinishStream already does it for us
+		forget(self);
 		String::from_utf8(r)
 	}
 }
