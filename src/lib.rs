@@ -149,7 +149,7 @@ impl Stream {
 	}
 
 	/// Deallocates the stream and returns the decoded text
-	pub fn finish(mut self) -> Result<String, std::string::FromUtf8Error> {
+	pub fn finish(self) -> Result<String, std::string::FromUtf8Error> {
 		let r = unsafe {
 			let ptr = ds::DS_FinishStream(self.stream);
 			let s = CStr::from_ptr(ptr);
