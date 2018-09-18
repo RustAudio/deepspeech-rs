@@ -4,7 +4,7 @@ description = "Rust bindings to Mozilla's DeepSpeech STT implementation"
 license = "MIT/Apache-2.0"
 documentation = "https://docs.rs/deepspeech"
 repository = "https://github.com/RustAudio/deepspeech-rs"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["est31 <MTest31@outlook.com>"]
 
 [dev-dependencies]
@@ -12,5 +12,5 @@ audrey = "0.2"
 
 [dependencies]
 libc = "0.2"
-deepspeech-sys = { path = "sys" }
-#deepspeech-sys = { path = "sys", version = "0.0.3" }
+#deepspeech-sys = { path = "sys" }
+deepspeech-sys = { path = "sys", version = "0.0.4" }
