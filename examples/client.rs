@@ -69,6 +69,8 @@ fn main() {
 		conv.until_exhausted().map(|v| v[0]).collect::<Vec<_>>()
 	};
 
+	println!("Initialisation done. Running the STT algorithm.");
+
 	// Run the speech to text algorithm
 	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
 
