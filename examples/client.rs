@@ -86,7 +86,8 @@ fn main() {
 
 	let text_time = Instant::now();
 
-	let elapsed = text_time - initialized_time;
+	let elapsed = text_time - decoded_time;
+
 	let elapsed_f = elapsed.subsec_micros() as f64 / 1_000_000.0
 		+ elapsed.as_secs() as f64;
 	println!("STT done in {:?}. Real time factor {:.5}", elapsed, elapsed_f / len_seconds);
