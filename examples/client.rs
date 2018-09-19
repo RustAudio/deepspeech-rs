@@ -57,7 +57,7 @@ fn main() {
 
 	// Obtain the buffer of samples
 	let audio_buf :Vec<_> = if desc.sample_rate() == SAMPLE_RATE {
-		reader.samples().map(|s| s.unwrap()).collect::<Vec<_>>()
+		reader.samples().map(|s| s.unwrap()).collect()
 	} else {
 		// We need to interpolate to the target sample rate
 		let interpolator = Linear::new([0i16], [0]);
@@ -66,7 +66,7 @@ fn main() {
 			interpolator,
 			desc.sample_rate() as f64,
 			SAMPLE_RATE as f64);
-		conv.until_exhausted().map(|v| v[0]).collect::<Vec<_>>()
+		conv.until_exhausted().map(|v| v[0]).collect()
 	};
 
 	println!("Initialisation done. Running the STT algorithm.");
