@@ -4,7 +4,6 @@ extern crate audrey;
 use std::path::Path;
 use std::env::args;
 use std::fs::File;
-use std::time::Instant;
 
 use deepspeech::Model;
 use audrey::read::Reader;
@@ -32,7 +31,6 @@ TODO list:
 * use clap or something to parse the command line arguments
 */
 fn main() {
-	let start = Instant::now();
 	let model_dir_str = args().nth(1)
 		.expect("Please specify model dir");
 	let audio_file_path = args().nth(2)
@@ -50,9 +48,6 @@ fn main() {
 		&dir_path.join("trie"),
 		LM_WEIGHT,
 		VALID_WORD_COUNT_WEIGHT);
-
-	let initialized_time = Instant::now();
-	println!("Model initialized in {:?}.", initialized_time - start);
 
 	let audio_file = File::open(audio_file_path).unwrap();
 	let mut reader = Reader::new(audio_file).unwrap();
@@ -74,24 +69,9 @@ fn main() {
 		conv.until_exhausted().map(|v| v[0]).collect()
 	};
 
-	let len_seconds = audio_buf.len() as f64 / desc.sample_rate() as f64;
-
-	let decoded_time = Instant::now();
-
-	println!("Decoding done in {:?}. Sample length {}s. Running STT.",
-		decoded_time - initialized_time, len_seconds);
-
 	// Run the speech to text algorithm
 	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
 
-	let text_time = Instant::now();
-
-	let elapsed = text_time - initialized_time;
-	let elapsed_f = elapsed.subsec_micros() as f64 / 1_000_000.0
-		+ elapsed.as_secs() as f64;
-	println!("STT done in {:?}. Real time factor {:.5}", elapsed, elapsed_f / len_seconds);
-
 	// Output the result
 	println!("{}", result);
-
 }
