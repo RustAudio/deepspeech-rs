@@ -5,7 +5,6 @@ use std::path::PathBuf;
 
 fn main() {
 	println!("cargo:rustc-link-lib=deepspeech");
-	println!("cargo:rustc-link-lib=ctc_decoder_with_kenlm");
 
 	let bindings = bindgen::Builder::default()
 		.header("stddef.h")
