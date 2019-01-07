@@ -30,7 +30,7 @@ See DeepSpeech's [0.4.0 release announcement](https://github.com/mozilla/DeepSpe
 
 ## Supported versions of DeepSpeech
 
-As of writing this, only version `0.3` of the DeepSpeech library is supported.
+As of writing this, only version `0.4.0` of the DeepSpeech library is supported.
 We will always try to provide compatibility with the most recent release possible.
 
 ## License
