@@ -12,8 +12,8 @@ The library is open source and performs Speech-To-Text completely offline. They 
 
 Preparation:
 
-1. Obtain the Deepspeech `native_client` library. The [0.3.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.3.0) contains precompiled libraries for various targets.
-2. Download the pretrained models from the URL `https://github.com/mozilla/DeepSpeech/releases/download/v0.3.0/deepspeech-0.3.0-models.tar.gz` and extract the zip file to some location.
+1. Obtain the Deepspeech `native_client` library. The [0.4.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.4.0) contains precompiled libraries for various targets.
+2. Download the pretrained models from the URL `https://github.com/mozilla/DeepSpeech/releases/download/v0.4.0/deepspeech-0.4.0-models.tar.gz` and extract the zip file to some location.
 3. Add the directory where the precompiled components lie (the DeepSpeech checkout) to your `LD_LIBRARY_PATH` and `LIBRARY_PATH` environment variables.
 
 You can now invoke the example via:
@@ -26,7 +26,7 @@ It will print out the recognized sequence on stdout. The format of the audio fil
 
 All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) library supports are supported.
 
-See DeepSpeech's [0.3.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.3.0) for more.
+See DeepSpeech's [0.4.0 release announcement](https://github.com/mozilla/DeepSpeech/releases/tag/v0.4.0) for more.
 
 ## Supported versions of DeepSpeech
 
