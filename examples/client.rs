@@ -17,8 +17,8 @@ const N_CEP :u16 = 26;
 const N_CONTEXT :u16 = 9;
 const BEAM_WIDTH :u16 = 500;
 
-const LM_WEIGHT :f32 = 1.75;
-const VALID_WORD_COUNT_WEIGHT :f32 = 1.0;
+const LM_WEIGHT :f32 = 0.75;
+const VALID_WORD_COUNT_WEIGHT :f32 = 1.85;
 
 // The model has been trained on this specific
 // sample rate.
