@@ -6,15 +6,26 @@ extern crate libc;
 extern crate deepspeech_sys;
 
 use std::ffi::CStr;
+use std::fmt;
 use std::path::Path;
 use std::ops::Drop;
 use std::ptr;
 use std::mem::forget;
+use std::slice;
 use libc::free;
 use deepspeech_sys as ds;
 
 pub struct Model {
 	model :* mut ds::ModelState,
+}
+
+pub struct Metadata {
+	metadata :* mut ds::Metadata,
+}
+
+#[repr(transparent)]
+pub struct MetadataItem {
+	metadata_item :ds::MetadataItem,
 }
 
 fn path_to_buf(p :&Path) -> Vec<u8> {
@@ -90,6 +101,25 @@ impl Model {
 		String::from_utf8(r)
 	}
 
+	/// Perform speech-to-text using the model, getting extended metadata
+	///
+	/// The input buffer must consist of mono 16-bit samples.
+	/// The sample rate is not freely chooseable but a property
+	/// of the model files.
+	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16],
+			sample_rate :u32) -> Result<Metadata, ()> {
+		let ptr = unsafe {
+			ds::DS_SpeechToTextWithMetadata(
+				self.model,
+				buffer.as_ptr(),
+				buffer.len() as _,
+				sample_rate as _)
+		};
+		Ok(Metadata {
+			metadata : ptr
+		})
+	}
+
 	/// Set up a state for streaming inference
 	pub fn setup_stream(&mut self, pre_alloc_frames :u32, sample_rate :u32) -> Result<Stream, ()> {
 		let mut ptr = ptr::null_mut();
@@ -115,6 +145,62 @@ impl Drop for Model {
 		unsafe {
 			ds::DS_DestroyModel(self.model);
 		}
+	}
+}
+
+impl Drop for Metadata {
+	fn drop(&mut self) {
+		unsafe {
+			ds::DS_FreeMetadata(self.metadata);
+		}
+	}
+}
+
+impl Metadata {
+	pub fn items(&self) -> &[MetadataItem] {
+		unsafe {
+			let ptr = (*self.metadata).items as * const MetadataItem;
+			slice::from_raw_parts(ptr, self.num_items() as usize)
+		}
+	}
+
+	pub fn num_items(&self) -> i32 {
+		unsafe {
+			(*self.metadata).num_items
+		}
+	}
+
+	pub fn probability(&self) -> f64 {
+		unsafe {
+			(*self.metadata).probability
+		}
+	}
+}
+
+impl MetadataItem {
+	pub fn character(&self) -> Result<&str, std::str::Utf8Error> {
+		unsafe {
+			let slice = CStr::from_ptr(self.metadata_item.character);
+			slice.to_str()
+		}
+	}
+
+	pub fn timestep(&self) -> i32 {
+		self.metadata_item.timestep
+	}
+
+	pub fn start_time(&self) -> f32 {
+		self.metadata_item.start_time
+	}
+}
+
+impl fmt::Display for Metadata {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		let mut s = String::new();
+		for item in 0..self.num_items() {
+			s += self.items()[item as usize].character().unwrap();
+		}
+		write!(f, "{}", s)
 	}
 }
 
@@ -162,6 +248,19 @@ impl Stream {
 		// as DS_FinishStream already does it for us
 		forget(self);
 		String::from_utf8(r)
+	}
+
+	/// Deallocates the stream and returns the extended metadata
+	pub fn finish_with_metadata(self) -> Result<Metadata, ()> {
+		let ptr = unsafe {
+			ds::DS_FinishStreamWithMetadata(self.stream)
+		};
+		// Don't run the destructor for self,
+		// as DS_FinishStream already does it for us
+		forget(self);
+		Ok(Metadata {
+			metadata : ptr
+		})
 	}
 }
 
