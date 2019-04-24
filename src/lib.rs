@@ -196,8 +196,8 @@ impl MetadataItem {
 impl fmt::Display for Metadata {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let mut s = String::new();
-		for item in 0..self.num_items() {
-			s += self.items()[item as usize].character().unwrap();
+		for item in self.items() {
+			s += item.character().unwrap();
 		}
 		write!(f, "{}", s)
 	}

@@ -26,8 +26,8 @@ const SAMPLE_RATE :u32 = 16_000;
 
 fn metadata_to_string(m: Metadata) -> String {
 	let mut s = String::new();
-	for item in 0..m.num_items() {
-		s += m.items()[item as usize].character().unwrap();
+	for item in m.items() {
+		s += item.character().unwrap();
 	}
 	s
 }
