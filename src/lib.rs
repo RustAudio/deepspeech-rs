@@ -12,7 +12,6 @@ use std::ops::Drop;
 use std::ptr;
 use std::mem::forget;
 use std::slice;
-use libc::free;
 use deepspeech_sys as ds;
 
 pub struct Model {
@@ -95,7 +94,7 @@ impl Model {
 			let s = CStr::from_ptr(ptr);
 			let mut v = Vec::new();
 			v.extend_from_slice(s.to_bytes());
-			free(ptr as _);
+			ds::DS_FreeString(ptr);
 			v
 		};
 		String::from_utf8(r)
@@ -228,7 +227,7 @@ impl Stream {
 			let s = CStr::from_ptr(ptr);
 			let mut v = Vec::new();
 			v.extend_from_slice(s.to_bytes());
-			free(ptr as _);
+			ds::DS_FreeString(ptr);
 			v
 		};
 		String::from_utf8(r)
@@ -241,7 +240,7 @@ impl Stream {
 			let s = CStr::from_ptr(ptr);
 			let mut v = Vec::new();
 			v.extend_from_slice(s.to_bytes());
-			free(ptr as _);
+			ds::DS_FreeString(ptr);
 			v
 		};
 		// Don't run the destructor for self,
