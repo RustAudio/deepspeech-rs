@@ -74,7 +74,7 @@ fn main() {
 		conv.until_exhausted().map(|v| v[0]).collect()
 	};
 
-	let len_seconds = audio_buf.len() as f64 / desc.sample_rate() as f64;
+	let len_seconds = audio_buf.len() as f64 / SAMPLE_RATE as f64;
 
 	let decoded_time = Instant::now();
 
