@@ -37,16 +37,14 @@ fn path_to_buf(p :&Path) -> Vec<u8> {
 
 impl Model {
 	/// Load a DeepSpeech model from the specified model and alphabet file paths
-	pub fn load_from_files(model_path :&Path, n_cep :u16, n_context :u16,
-			alphabet_path :&Path, beam_width :u16) -> Result<Self, ()> {
+	pub fn load_from_files(model_path :&Path, alphabet_path :&Path, beam_width :u16)
+        -> Result<Self, ()> {
 		let mp = path_to_buf(model_path);
 		let ap = path_to_buf(alphabet_path);
 		let mut model = ptr::null_mut();
 		let ret = unsafe {
 			ds::DS_CreateModel(
 				mp.as_ptr() as _,
-				n_cep as _,
-				n_context as _,
 				ap.as_ptr() as _,
 				beam_width as _,
 				&mut model)
@@ -60,17 +58,13 @@ impl Model {
 	}
 
 	/// Load a KenLM language model from a file and enable decoding using beam scoring
-	pub fn enable_decoder_with_lm(&mut self, alphabet_path :&Path,
-			language_model_path :&Path, trie_path :&Path,
-			weight :f32,
-			valid_word_count_weight :f32) {
-		let ap = path_to_buf(alphabet_path);
+	pub fn enable_decoder_with_lm(&mut self, language_model_path :&Path,
+            trie_path :&Path, weight :f32, valid_word_count_weight :f32) {
 		let lp = path_to_buf(language_model_path);
 		let tp = path_to_buf(trie_path);
 		unsafe {
 			ds::DS_EnableDecoderWithLM(
 				self.model,
-				ap.as_ptr() as _,
 				lp.as_ptr() as _,
 				tp.as_ptr() as _,
 				weight,
@@ -120,12 +114,11 @@ impl Model {
 	}
 
 	/// Set up a state for streaming inference
-	pub fn setup_stream(&mut self, pre_alloc_frames :u32, sample_rate :u32) -> Result<Stream, ()> {
+	pub fn create_stream(&mut self, sample_rate :u32) -> Result<Stream, ()> {
 		let mut ptr = ptr::null_mut();
 		let ret = unsafe {
-			ds::DS_SetupStream(
+			ds::DS_CreateStream(
 				self.model,
-				pre_alloc_frames as _,
 				sample_rate as _,
 				&mut ptr,
 			)
@@ -142,7 +135,7 @@ impl Model {
 impl Drop for Model {
 	fn drop(&mut self) {
 		unsafe {
-			ds::DS_DestroyModel(self.model);
+			ds::DS_FreeModel(self.model);
 		}
 	}
 }
@@ -266,7 +259,7 @@ impl Stream {
 impl Drop for Stream {
 	fn drop(&mut self) {
 		unsafe {
-			ds::DS_DiscardStream(self.stream);
+			ds::DS_FreeStream(self.stream);
 		}
 	}
 }
