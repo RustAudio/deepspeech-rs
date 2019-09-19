@@ -13,8 +13,6 @@ use audrey::sample::signal::{from_iter, Signal};
 
 // These constants are taken from the C++ sources of the client.
 
-const N_CEP :u16 = 26;
-const N_CONTEXT :u16 = 9;
 const BEAM_WIDTH :u16 = 500;
 
 const LM_WEIGHT :f32 = 0.75;
@@ -40,12 +38,9 @@ fn main() {
 	let dir_path = Path::new(&model_dir_str);
 	let mut m = Model::load_from_files(
 		&dir_path.join("output_graph.pb"),
-		N_CEP,
-		N_CONTEXT,
 		&dir_path.join("alphabet.txt"),
 		BEAM_WIDTH).unwrap();
 	m.enable_decoder_with_lm(
-		&dir_path.join("alphabet.txt"),
 		&dir_path.join("lm.binary"),
 		&dir_path.join("trie"),
 		LM_WEIGHT,
