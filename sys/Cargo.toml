@@ -13,4 +13,4 @@ include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 [dependencies]
 
 [build-dependencies]
-bindgen = "0.49"
+bindgen = "0.51"
