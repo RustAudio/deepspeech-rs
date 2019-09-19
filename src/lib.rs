@@ -37,8 +37,7 @@ fn path_to_buf(p :&Path) -> Vec<u8> {
 
 impl Model {
 	/// Load a DeepSpeech model from the specified model and alphabet file paths
-	pub fn load_from_files(model_path :&Path, alphabet_path :&Path, beam_width :u16)
-        -> Result<Self, ()> {
+	pub fn load_from_files(model_path :&Path, alphabet_path :&Path, beam_width :u16) -> Result<Self, ()> {
 		let mp = path_to_buf(model_path);
 		let ap = path_to_buf(alphabet_path);
 		let mut model = ptr::null_mut();
@@ -59,7 +58,7 @@ impl Model {
 
 	/// Load a KenLM language model from a file and enable decoding using beam scoring
 	pub fn enable_decoder_with_lm(&mut self, language_model_path :&Path,
-            trie_path :&Path, weight :f32, valid_word_count_weight :f32) {
+			trie_path :&Path, weight :f32, valid_word_count_weight :f32) {
 		let lp = path_to_buf(language_model_path);
 		let tp = path_to_buf(trie_path);
 		unsafe {
