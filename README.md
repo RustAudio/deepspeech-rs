@@ -1,8 +1,7 @@
 # deepspeech-rs
 
-[crates.io](https://crates.io/crates/deepspeech)
-
-[docs.rs](https://docs.rs/deepspeech)
+[![docs](https://docs.rs/deepspeech/badge.svg)](https://docs.rs/crate/deepspeech)
+[![crates.io](https://img.shields.io/crates/v/deepspeech.svg)](https://crates.io/crates/deepspeech)
 
 Rust bindings of [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech) library.
 
