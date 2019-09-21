@@ -6,6 +6,7 @@ documentation = "https://docs.rs/deepspeech"
 repository = "https://github.com/RustAudio/deepspeech-rs"
 version = "0.5.0"
 authors = ["est31 <MTest31@outlook.com>"]
+edition = "2018"
 
 include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]

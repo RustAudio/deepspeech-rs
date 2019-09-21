@@ -10,6 +10,7 @@ repository = "https://github.com/RustAudio/deepspeech-rs"
 version = "0.5.0"
 authors = ["est31 <MTest31@outlook.com>"]
 readme = "README.md"
+edition = "2018"
 
 [dev-dependencies]
 audrey = "0.2"

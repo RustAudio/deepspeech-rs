@@ -1,6 +1,3 @@
-extern crate deepspeech;
-extern crate audrey;
-
 use std::path::Path;
 use std::env::args;
 use std::fs::File;

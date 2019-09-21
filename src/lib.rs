@@ -2,9 +2,6 @@
 Bindings to the DeepSpeech library
 */
 
-extern crate libc;
-extern crate deepspeech_sys;
-
 use std::ffi::CStr;
 use std::fmt;
 use std::path::Path;
