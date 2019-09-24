@@ -161,9 +161,9 @@ impl Metadata {
 		}
 	}
 
-	pub fn probability(&self) -> f64 {
+	pub fn confidence(&self) -> f64 {
 		unsafe {
-			(*self.metadata).probability
+			(*self.metadata).confidence
 		}
 	}
 }
