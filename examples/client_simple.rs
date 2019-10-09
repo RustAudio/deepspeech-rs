@@ -65,7 +65,7 @@ fn main() {
 	};
 
 	// Run the speech to text algorithm
-	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
+	let result = m.speech_to_text(&audio_buf).unwrap();
 
 	// Output the result
 	println!("{}", result);

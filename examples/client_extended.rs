@@ -74,7 +74,7 @@ fn main() {
 	};
 
 	// Run the speech to text algorithm
-	let result = metadata_to_string(m.speech_to_text_with_metadata(&audio_buf, SAMPLE_RATE).unwrap());
+	let result = metadata_to_string(m.speech_to_text_with_metadata(&audio_buf).unwrap());
 
 	// Output the result
 	println!("{}", result);
