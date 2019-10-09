@@ -77,7 +77,7 @@ fn main() {
 		decoded_time - initialized_time, len_seconds);
 
 	// Run the speech to text algorithm
-	let result = m.speech_to_text(&audio_buf, SAMPLE_RATE).unwrap();
+	let result = m.speech_to_text(&audio_buf).unwrap();
 
 	let text_time = Instant::now();
 

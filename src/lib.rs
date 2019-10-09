@@ -76,14 +76,12 @@ impl Model {
 	/// The input buffer must consist of mono 16-bit samples.
 	/// The sample rate is not freely chooseable but a property
 	/// of the model files.
-	pub fn speech_to_text(&mut self, buffer :&[i16],
-			sample_rate :u32) -> Result<String, std::string::FromUtf8Error> {
+	pub fn speech_to_text(&mut self, buffer :&[i16]) -> Result<String, std::string::FromUtf8Error> {
 		let r = unsafe {
 			let ptr = ds::DS_SpeechToText(
 				self.model,
 				buffer.as_ptr(),
-				buffer.len() as _,
-				sample_rate as _);
+				buffer.len() as _);
 			let s = CStr::from_ptr(ptr);
 			let mut v = Vec::new();
 			v.extend_from_slice(s.to_bytes());
@@ -98,14 +96,12 @@ impl Model {
 	/// The input buffer must consist of mono 16-bit samples.
 	/// The sample rate is not freely chooseable but a property
 	/// of the model files.
-	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16],
-			sample_rate :u32) -> Result<Metadata, ()> {
+	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16]) -> Result<Metadata, ()> {
 		let ptr = unsafe {
 			ds::DS_SpeechToTextWithMetadata(
 				self.model,
 				buffer.as_ptr(),
-				buffer.len() as _,
-				sample_rate as _)
+				buffer.len() as _)
 		};
 		Ok(Metadata {
 			metadata : ptr
@@ -113,12 +109,11 @@ impl Model {
 	}
 
 	/// Set up a state for streaming inference
-	pub fn create_stream(&mut self, sample_rate :u32) -> Result<Stream, ()> {
+	pub fn create_stream(&mut self) -> Result<Stream, ()> {
 		let mut ptr = ptr::null_mut();
 		let ret = unsafe {
 			ds::DS_CreateStream(
 				self.model,
-				sample_rate as _,
 				&mut ptr,
 			)
 		};
