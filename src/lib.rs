@@ -36,15 +36,13 @@ fn path_to_buf(p :&Path) -> Vec<u8> {
 }
 
 impl Model {
-	/// Load a DeepSpeech model from the specified model and alphabet file paths
-	pub fn load_from_files(model_path :&Path, alphabet_path :&Path, beam_width :u16) -> Result<Self, ()> {
+	/// Load a DeepSpeech model from the specified model file path
+	pub fn load_from_files(model_path :&Path, beam_width :u16) -> Result<Self, ()> {
 		let mp = path_to_buf(model_path);
-		let ap = path_to_buf(alphabet_path);
 		let mut model = ptr::null_mut();
 		let ret = unsafe {
 			ds::DS_CreateModel(
 				mp.as_ptr() as _,
-				ap.as_ptr() as _,
 				beam_width as _,
 				&mut model)
 		};
