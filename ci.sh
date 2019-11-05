@@ -20,4 +20,4 @@ tar xf native_client.*
 popd
 #export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}$client_dir"
 export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}$client_dir"
-cargo test
+cargo test --all
