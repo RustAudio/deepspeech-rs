@@ -45,7 +45,6 @@ fn main() {
 	let dir_path = Path::new(&model_dir_str);
 	let mut m = Model::load_from_files(
 		&dir_path.join("output_graph.pb"),
-		&dir_path.join("alphabet.txt"),
 		BEAM_WIDTH).unwrap();
 	m.enable_decoder_with_lm(
 		&dir_path.join("lm.binary"),
