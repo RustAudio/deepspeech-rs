@@ -6,3 +6,4 @@ rust:
 script:
   - cargo build --verbose
   - cargo doc --verbose
+  - ./ci.sh
