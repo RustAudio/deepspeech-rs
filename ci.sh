@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-dir=$(dirname "${BASH_SOURCE[0]}")
-release="v0.6.0-alpha.12"
-
 # Fail on error
 set -e
 
 # Verbose execution
 set -v
+
+dir=$(dirname "${BASH_SOURCE[0]}")
+release="v$(cat $dir/sys/deepspeech/VERSION)"
+echo "release is $release"
 
 # Download the native client
 client_dir="$dir/target/native_client"
