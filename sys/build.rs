@@ -5,6 +5,7 @@ use std::env;
 use std::path::PathBuf;
 use std::path::Path;
 
+// Workaround for https://github.com/rust-lang/rust-bindgen/issues/1600
 fn write_to_file(path :impl AsRef<Path>, bindings :&bindgen::Bindings) {
 	use proc_macro2::{TokenStream, TokenTree, Spacing, Delimiter};
 	use std::str::FromStr;
