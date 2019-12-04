@@ -13,5 +13,5 @@ include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 [dependencies]
 
 [build-dependencies]
-bindgen = { version = "0.51", default-features = false }
-proc-macro2 = { version = "0.4", default-features = false }
+bindgen = { version = "0.52", default-features = false, features = ["runtime"] }
+proc-macro2 = { version = "1.0", default-features = false }
