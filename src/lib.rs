@@ -69,6 +69,13 @@ impl Model {
 		}
 	}
 
+	/// Get sample rate expected by a model
+	pub fn get_sample_rate(&mut self) -> i32 {
+		unsafe {
+			ds::DS_GetModelSampleRate(self.model)
+		}
+	}
+
 	/// Perform speech-to-text using the model
 	///
 	/// The input buffer must consist of mono 16-bit samples.
