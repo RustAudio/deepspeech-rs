@@ -31,7 +31,7 @@ See DeepSpeech's [release announcement] for more.
 
 ## Supported versions of DeepSpeech
 
-As of writing this, only version `0.6.0` of the DeepSpeech library is supported.
+We currently support version `0.6.0` of the DeepSpeech library.
 We will always try to provide compatibility with the most recent release possible.
 
 ## License
