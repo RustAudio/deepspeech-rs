@@ -13,7 +13,7 @@ Preparation:
 
 1. Obtain the Deepspeech `native_client` library. The [release announcement] contains precompiled libraries for various targets.
 2. Download the pretrained models named like `deepspeech-{version}-models.tar.gz` from the release announcement and extract the zip file to some location.
-3. Add the directory where the precompiled components lie (the DeepSpeech checkout) to your `LD_LIBRARY_PATH` and `LIBRARY_PATH` environment variables.
+3. Add the directory where the `native_client` library lies to your `LD_LIBRARY_PATH` and `LIBRARY_PATH` environment variables.
 
 You can now invoke the example via:
 
