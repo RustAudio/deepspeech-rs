@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+bindgen                                      \
+  --no-layout-tests                          \
+  --distrust-clang-mangling                  \
+  sys/deepspeech/native_client/deepspeech.h  \
+  > sys/src/bindings.rs

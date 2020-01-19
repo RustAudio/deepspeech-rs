@@ -9,9 +9,3 @@ authors = ["est31 <MTest31@outlook.com>"]
 
 include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]
-
-[dependencies]
-
-[build-dependencies]
-bindgen = { version = "0.52", default-features = false, features = ["runtime"] }
-proc-macro2 = { version = "1.0", default-features = false }
