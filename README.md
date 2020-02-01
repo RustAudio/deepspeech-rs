@@ -41,6 +41,8 @@ Licensed under Apache 2 or MIT (at your option). For details, see the [LICENSE](
 All examples inside the `examples/` folder are licensed under the
 [CC-0](https://creativecommons.org/publicdomain/zero/1.0/) license.
 
+The generated bindings (`sys` subdirectory in git, `-sys` crate on crates.io) fall unter the Mozilla Public License, version 2.0.
+
 ### License of your contributions
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for
