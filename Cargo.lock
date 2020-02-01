@@ -109,16 +109,22 @@ checksum = "f86c952727a495bda7abaf09bafdee1a939194dd793d9a8e26281df55ac43b00"
 
 [[package]]
 name = "deepspeech"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "audrey",
- "deepspeech-sys",
+ "deepspeech-sys 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc",
 ]
 
 [[package]]
 name = "deepspeech-sys"
 version = "0.6.1"
+
+[[package]]
+name = "deepspeech-sys"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65ec691d96991915e8115d4d70d5d97a08d10044c64e864f911112816510be4a"
 
 [[package]]
 name = "glob"
