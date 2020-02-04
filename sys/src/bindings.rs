@@ -1,4 +1,5 @@
-# [repr ( C )] # [repr ( align ( 16 ) )] # [derive ( Debug , Copy , Clone )] pub struct max_align_t {
+pub type size_t = :: std :: os :: raw :: c_ulong ;
+ # [repr ( C )] # [repr ( align ( 16 ) )] # [derive ( Debug , Copy , Clone )] pub struct max_align_t {
 pub __clang_max_align_nonce1 : :: std :: os :: raw :: c_longlong , pub __bindgen_padding_0 : u64 , pub __clang_max_align_nonce2 : u128 ,
 }
  # [test] fn bindgen_test_layout_max_align_t () {
