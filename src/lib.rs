@@ -302,3 +302,15 @@ impl Drop for Stream {
 		}
 	}
 }
+
+pub fn deepspeech_version() -> Result<String, std::string::FromUtf8Error> {
+	let r = unsafe {
+		let ptr = ds::DS_Version();
+		let s = CStr::from_ptr(ptr);
+		let mut v = Vec::new();
+		v.extend_from_slice(s.to_bytes());
+		ds::DS_FreeString(ptr);
+		v
+	};
+	String::from_utf8(r)
+}
