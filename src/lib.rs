@@ -76,13 +76,13 @@ impl Model {
 	}
 
 	/// Get sample rate expected by a model
-	pub fn get_sample_rate(&mut self) -> i32 {
+	pub fn get_sample_rate(&self) -> i32 {
 		unsafe {
 			ds::DS_GetModelSampleRate(self.model) as _
 		}
 	}
 
-	pub fn get_model_beam_width(&mut self) -> u16 {
+	pub fn get_model_beam_width(&self) -> u16 {
 		unsafe {
 			ds::DS_GetModelBeamWidth(self.model) as _
 		}
