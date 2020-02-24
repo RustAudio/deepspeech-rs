@@ -82,12 +82,14 @@ impl Model {
 		}
 	}
 
+	/// Get beam width value the model is currently configured to use
 	pub fn get_model_beam_width(&self) -> u16 {
 		unsafe {
 			ds::DS_GetModelBeamWidth(self.model) as _
 		}
 	}
 
+	/// Set beam width value used by the model
 	pub fn set_model_beam_width(&mut self, bw :u16) -> Result<(), ()> {
 		let ret = unsafe {
 			ds::DS_SetModelBeamWidth(self.model, bw as _)
@@ -204,6 +206,7 @@ impl Metadata {
 }
 
 impl MetadataItem {
+	/// The character generated for transcription
 	pub fn character(&self) -> Result<&str, std::str::Utf8Error> {
 		unsafe {
 			let slice = CStr::from_ptr(self.metadata_item.character);
@@ -211,10 +214,12 @@ impl MetadataItem {
 		}
 	}
 
+	/// Position of the character in units of 20ms
 	pub fn timestep(&self) -> i32 {
 		self.metadata_item.timestep
 	}
 
+	/// Position of the character in seconds
 	pub fn start_time(&self) -> f32 {
 		self.metadata_item.start_time
 	}
