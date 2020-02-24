@@ -16,5 +16,5 @@ audrey = "0.2"
 
 [dependencies]
 libc = "0.2"
-#deepspeech-sys = { path = "sys" }
-deepspeech-sys = "0.6.1"
+deepspeech-sys = { path = "sys" }
+#deepspeech-sys = "0.6.1"

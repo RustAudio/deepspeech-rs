@@ -37,13 +37,12 @@ fn path_to_buf(p :&Path) -> Vec<u8> {
 
 impl Model {
 	/// Load a DeepSpeech model from the specified model file path
-	pub fn load_from_files(model_path :&Path, beam_width :u16) -> Result<Self, ()> {
+	pub fn load_from_files(model_path :&Path) -> Result<Self, ()> {
 		let mp = path_to_buf(model_path);
 		let mut model = ptr::null_mut();
 		let ret = unsafe {
 			ds::DS_CreateModel(
 				mp.as_ptr() as _,
-				beam_width as _,
 				&mut model)
 		};
 		if ret != 0 {
@@ -54,18 +53,13 @@ impl Model {
 		})
 	}
 
-	/// Load a KenLM language model from a file and enable decoding using beam scoring
-	pub fn enable_decoder_with_lm(&mut self, language_model_path :&Path,
-			trie_path :&Path, weight :f32, valid_word_count_weight :f32) {
-		let lp = path_to_buf(language_model_path);
-		let tp = path_to_buf(trie_path);
+	/// Enable decoding using an external scorer
+	pub fn enable_external_scorer(&mut self, scorer_path :&Path) {
+		let sp = path_to_buf(scorer_path);
 		unsafe {
-			ds::DS_EnableDecoderWithLM(
+			ds::DS_EnableExternalScorer(
 				self.model,
-				lp.as_ptr() as _,
-				tp.as_ptr() as _,
-				weight,
-				valid_word_count_weight);
+				sp.as_ptr() as _);
 		}
 	}
 
