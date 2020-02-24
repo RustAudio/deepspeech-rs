@@ -41,8 +41,9 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
  pub const DeepSpeech_Error_Codes_DS_ERR_NO_MODEL : DeepSpeech_Error_Codes = 4096 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_ALPHABET : DeepSpeech_Error_Codes = 8192 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_SHAPE : DeepSpeech_Error_Codes = 8193 ;
- pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_LM : DeepSpeech_Error_Codes = 8194 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_SCORER : DeepSpeech_Error_Codes = 8194 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_MODEL_INCOMPATIBLE : DeepSpeech_Error_Codes = 8195 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_NOT_ENABLED : DeepSpeech_Error_Codes = 8196 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_MMAP : DeepSpeech_Error_Codes = 12288 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_SESS : DeepSpeech_Error_Codes = 12289 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INTERPRETER : DeepSpeech_Error_Codes = 12290 ;
@@ -53,7 +54,15 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CREATE_MODEL : DeepSpeech_Error_Codes = 12295 ;
  pub type DeepSpeech_Error_Codes = u32 ;
  extern "C" {
-# [doc = " @brief An object providing an interface to a trained DeepSpeech model."] # [doc = ""] # [doc = " @param aModelPath The path to the frozen model graph."] # [doc = " @param aBeamWidth The beam width used by the decoder. A larger beam"] # [doc = "                   width generates better results at the cost of decoding"] # [doc = "                   time."] # [doc = " @param[out] retval a ModelState pointer"] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure."] pub fn DS_CreateModel (aModelPath : * const :: std :: os :: raw :: c_char , aBeamWidth : :: std :: os :: raw :: c_uint , retval : * mut * mut ModelState ,) -> :: std :: os :: raw :: c_int ;
+# [doc = " @brief An object providing an interface to a trained DeepSpeech model."] # [doc = ""] # [doc = " @param aModelPath The path to the frozen model graph."] # [doc = " @param[out] retval a ModelState pointer"] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure."] pub fn DS_CreateModel (aModelPath : * const :: std :: os :: raw :: c_char , retval : * mut * mut ModelState ,) -> :: std :: os :: raw :: c_int ;
+
+}
+ extern "C" {
+# [doc = " @brief Get beam width value used by the model. If {@link DS_SetModelBeamWidth}"] # [doc = "        was not called before, will return the default value loaded from the"] # [doc = "        model file."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = ""] # [doc = " @return Beam width value used by the model."] pub fn DS_GetModelBeamWidth (aCtx : * mut ModelState) -> :: std :: os :: raw :: c_uint ;
+
+}
+ extern "C" {
+# [doc = " @brief Set beam width value used by the model."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = " @param aBeamWidth The beam width used by the model. A larger beam width value"] # [doc = "                   generates better results at the cost of decoding time."] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure."] pub fn DS_SetModelBeamWidth (aCtx : * mut ModelState , aBeamWidth : :: std :: os :: raw :: c_uint ,) -> :: std :: os :: raw :: c_int ;
 
 }
  extern "C" {
@@ -65,7 +74,15 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Enable decoding using beam scoring with a KenLM language model."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model being changed."] # [doc = " @param aLMPath The path to the language model binary file."] # [doc = " @param aTriePath The path to the trie file build from the same vocabu-"] # [doc = "                  lary as the language model binary."] # [doc = " @param aLMAlpha The alpha hyperparameter of the CTC decoder. Language Model"] # [doc = "weight."] # [doc = " @param aLMBeta The beta hyperparameter of the CTC decoder. Word insertion"] # [doc = "weight."] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure (invalid arguments)."] pub fn DS_EnableDecoderWithLM (aCtx : * mut ModelState , aLMPath : * const :: std :: os :: raw :: c_char , aTriePath : * const :: std :: os :: raw :: c_char , aLMAlpha : f32 , aLMBeta : f32 ,) -> :: std :: os :: raw :: c_int ;
+# [doc = " @brief Enable decoding using an external scorer."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model being changed."] # [doc = " @param aScorerPath The path to the external scorer file."] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure (invalid arguments)."] pub fn DS_EnableExternalScorer (aCtx : * mut ModelState , aScorerPath : * const :: std :: os :: raw :: c_char ,) -> :: std :: os :: raw :: c_int ;
+
+}
+ extern "C" {
+# [doc = " @brief Disable decoding using an external scorer."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model being changed."] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure."] pub fn DS_DisableExternalScorer (aCtx : * mut ModelState) -> :: std :: os :: raw :: c_int ;
+
+}
+ extern "C" {
+# [doc = " @brief Set hyperparameters alpha and beta of the external scorer."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model being changed."] # [doc = " @param aAlpha The alpha hyperparameter of the decoder. Language model weight."] # [doc = " @param aLMBeta The beta hyperparameter of the decoder. Word insertion weight."] # [doc = ""] # [doc = " @return Zero on success, non-zero on failure."] pub fn DS_SetScorerAlphaBeta (aCtx : * mut ModelState , aAlpha : f32 , aBeta : f32 ,) -> :: std :: os :: raw :: c_int ;
 
 }
  extern "C" {
@@ -109,6 +126,6 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Print version of this library and of the linked TensorFlow library."] pub fn DS_PrintVersions () ;
+# [doc = " @brief Return version of this library. The returned version is a semantic version"] # [doc = "        (SemVer 2.0.0). The string returned must be freed with {@link DS_FreeString()}."] # [doc = ""] # [doc = " @return The version string."] pub fn DS_Version () -> * mut :: std :: os :: raw :: c_char ;
 
 }
