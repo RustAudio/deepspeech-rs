@@ -11,13 +11,6 @@ use audrey::read::Reader;
 use audrey::sample::interpolate::{Converter, Linear};
 use audrey::sample::signal::{from_iter, Signal};
 
-// These constants are taken from the C++ sources of the client.
-
-const BEAM_WIDTH :u16 = 500;
-
-const LM_WEIGHT :f32 = 0.75;
-const VALID_WORD_COUNT_WEIGHT :f32 = 1.85;
-
 // The model has been trained on this specific
 // sample rate.
 const SAMPLE_RATE :u32 = 16_000;
@@ -36,14 +29,7 @@ fn main() {
 	let audio_file_path = args().nth(2)
 		.expect("Please specify an audio file to run STT on");
 	let dir_path = Path::new(&model_dir_str);
-	let mut m = Model::load_from_files(
-		&dir_path.join("output_graph.pb"),
-		BEAM_WIDTH).unwrap();
-	m.enable_decoder_with_lm(
-		&dir_path.join("lm.binary"),
-		&dir_path.join("trie"),
-		LM_WEIGHT,
-		VALID_WORD_COUNT_WEIGHT);
+	let mut m = Model::load_from_files(&dir_path.join("output_graph.pb")).unwrap();
 
 	let initialized_time = Instant::now();
 	println!("Model initialized in {:?}.", initialized_time - start);
