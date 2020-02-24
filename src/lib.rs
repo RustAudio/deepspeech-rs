@@ -63,10 +63,51 @@ impl Model {
 		}
 	}
 
+	/// Disable decoding using an external scorer
+	pub fn disable_external_scorer(&mut self) -> Result<(), ()> {
+		let ret = unsafe {
+			ds::DS_DisableExternalScorer(self.model)
+		};
+		if ret != 0 {
+			Err(())
+		} else {
+			Ok(())
+		}
+	}
+
 	/// Get sample rate expected by a model
 	pub fn get_sample_rate(&mut self) -> i32 {
 		unsafe {
-			ds::DS_GetModelSampleRate(self.model)
+			ds::DS_GetModelSampleRate(self.model) as _
+		}
+	}
+
+	pub fn get_model_beam_width(&mut self) -> u16 {
+		unsafe {
+			ds::DS_GetModelBeamWidth(self.model) as _
+		}
+	}
+
+	pub fn set_model_beam_width(&mut self, bw :u16) -> Result<(), ()> {
+		let ret = unsafe {
+			ds::DS_SetModelBeamWidth(self.model, bw as _)
+		};
+		if ret != 0 {
+			Err(())
+		} else {
+			Ok(())
+		}
+	}
+
+	/// Set hyperparameters alpha and beta of the external scorer
+	pub fn set_scorer_alpha_beta(&mut self, alpha :f32, beta :f32) -> Result<(), ()> {
+		let ret = unsafe {
+			ds::DS_SetScorerAlphaBeta(self.model, alpha, beta)
+		};
+		if ret != 0 {
+			Err(())
+		} else {
+			Ok(())
 		}
 	}
 
