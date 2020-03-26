@@ -15,26 +15,36 @@ _unused : [u8 ; 0] ,
  # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct StreamingState {
 _unused : [u8 ; 0] ,
 }
- # [doc = " @brief Stores each individual character, along with its timing information"] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct MetadataItem {
-# [doc = " The character generated for transcription"] pub character : * mut :: std :: os :: raw :: c_char , # [doc = " Position of the character in units of 20ms"] pub timestep : :: std :: os :: raw :: c_int , # [doc = " Position of the character in seconds"] pub start_time : f32 ,
+ # [doc = " @brief Stores text of an individual token, along with its timing information"] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct TokenMetadata {
+# [doc = " The text corresponding to this token"] pub text : * const :: std :: os :: raw :: c_char , # [doc = " Position of the token in units of 20ms"] pub timestep : :: std :: os :: raw :: c_uint , # [doc = " Position of the token in seconds"] pub start_time : f32 ,
 }
- # [test] fn bindgen_test_layout_MetadataItem () {
-assert_eq ! (:: std :: mem :: size_of ::< MetadataItem > ( ) , 16usize , concat ! ( "Size of: " , stringify ! ( MetadataItem ) )) ;
- assert_eq ! (:: std :: mem :: align_of ::< MetadataItem > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( MetadataItem ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< MetadataItem > ( ) ) ) . character as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( MetadataItem ) , "::" , stringify ! ( character ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< MetadataItem > ( ) ) ) . timestep as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( MetadataItem ) , "::" , stringify ! ( timestep ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< MetadataItem > ( ) ) ) . start_time as * const _ as usize } , 12usize , concat ! ( "Offset of field: " , stringify ! ( MetadataItem ) , "::" , stringify ! ( start_time ) )) ;
+ # [test] fn bindgen_test_layout_TokenMetadata () {
+assert_eq ! (:: std :: mem :: size_of ::< TokenMetadata > ( ) , 16usize , concat ! ( "Size of: " , stringify ! ( TokenMetadata ) )) ;
+ assert_eq ! (:: std :: mem :: align_of ::< TokenMetadata > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( TokenMetadata ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . text as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( text ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . timestep as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( timestep ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . start_time as * const _ as usize } , 12usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( start_time ) )) ;
 
 }
- # [doc = " @brief Stores the entire CTC output as an array of character metadata objects"] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct Metadata {
-# [doc = " List of items"] pub items : * mut MetadataItem , # [doc = " Size of the list of items"] pub num_items : :: std :: os :: raw :: c_int , # [doc = " Approximated confidence value for this transcription. This is roughly the"] # [doc = " sum of the acoustic model logit values for each timestep/character that"] # [doc = " contributed to the creation of this transcription."] pub confidence : f64 ,
+ # [doc = " @brief A single transcript computed by the model, including a confidence"] # [doc = "        value and the metadata for its constituent tokens."] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct CandidateTranscript {
+# [doc = " Array of TokenMetadata objects"] pub tokens : * const TokenMetadata , # [doc = " Size of the tokens array"] pub num_tokens : :: std :: os :: raw :: c_uint , # [doc = " Approximated confidence value for this transcript. This is roughly the"] # [doc = " sum of the acoustic model logit values for each timestep/character that"] # [doc = " contributed to the creation of this transcript."] pub confidence : f64 ,
+}
+ # [test] fn bindgen_test_layout_CandidateTranscript () {
+assert_eq ! (:: std :: mem :: size_of ::< CandidateTranscript > ( ) , 24usize , concat ! ( "Size of: " , stringify ! ( CandidateTranscript ) )) ;
+ assert_eq ! (:: std :: mem :: align_of ::< CandidateTranscript > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( CandidateTranscript ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . tokens as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( tokens ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . num_tokens as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( num_tokens ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . confidence as * const _ as usize } , 16usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( confidence ) )) ;
+
+}
+ # [doc = " @brief An array of CandidateTranscript objects computed by the model."] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct Metadata {
+# [doc = " Array of CandidateTranscript objects"] pub transcripts : * const CandidateTranscript , # [doc = " Size of the transcripts array"] pub num_transcripts : :: std :: os :: raw :: c_uint ,
 }
  # [test] fn bindgen_test_layout_Metadata () {
-assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( "Size of: " , stringify ! ( Metadata ) )) ;
+assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 16usize , concat ! ( "Size of: " , stringify ! ( Metadata ) )) ;
  assert_eq ! (:: std :: mem :: align_of ::< Metadata > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( Metadata ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . items as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( items ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . num_items as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( num_items ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . confidence as * const _ as usize } , 16usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( confidence ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . transcripts as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( transcripts ) )) ;
+ assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . num_transcripts as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( num_transcripts ) )) ;
 
 }
  pub const DeepSpeech_Error_Codes_DS_ERR_OK : DeepSpeech_Error_Codes = 0 ;
@@ -58,7 +68,7 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Get beam width value used by the model. If {@link DS_SetModelBeamWidth}"] # [doc = "        was not called before, will return the default value loaded from the"] # [doc = "        model file."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = ""] # [doc = " @return Beam width value used by the model."] pub fn DS_GetModelBeamWidth (aCtx : * mut ModelState) -> :: std :: os :: raw :: c_uint ;
+# [doc = " @brief Get beam width value used by the model. If {@link DS_SetModelBeamWidth}"] # [doc = "        was not called before, will return the default value loaded from the"] # [doc = "        model file."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = ""] # [doc = " @return Beam width value used by the model."] pub fn DS_GetModelBeamWidth (aCtx : * const ModelState) -> :: std :: os :: raw :: c_uint ;
 
 }
  extern "C" {
@@ -66,7 +76,7 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Return the sample rate expected by a model."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = ""] # [doc = " @return Sample rate expected by the model for its input."] pub fn DS_GetModelSampleRate (aCtx : * mut ModelState) -> :: std :: os :: raw :: c_int ;
+# [doc = " @brief Return the sample rate expected by a model."] # [doc = ""] # [doc = " @param aCtx A ModelState pointer created with {@link DS_CreateModel}."] # [doc = ""] # [doc = " @return Sample rate expected by the model for its input."] pub fn DS_GetModelSampleRate (aCtx : * const ModelState) -> :: std :: os :: raw :: c_int ;
 
 }
  extern "C" {
@@ -86,11 +96,11 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Use the DeepSpeech model to perform Speech-To-Text."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model to use."] # [doc = " @param aBuffer A 16-bit, mono raw audio signal at the appropriate"] # [doc = "                sample rate (matching what the model was trained on)."] # [doc = " @param aBufferSize The number of samples in the audio signal."] # [doc = ""] # [doc = " @return The STT result. The user is responsible for freeing the string using"] # [doc = "         {@link DS_FreeString()}. Returns NULL on error."] pub fn DS_SpeechToText (aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> * mut :: std :: os :: raw :: c_char ;
+# [doc = " @brief Use the DeepSpeech model to convert speech to text."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model to use."] # [doc = " @param aBuffer A 16-bit, mono raw audio signal at the appropriate"] # [doc = "                sample rate (matching what the model was trained on)."] # [doc = " @param aBufferSize The number of samples in the audio signal."] # [doc = ""] # [doc = " @return The STT result. The user is responsible for freeing the string using"] # [doc = "         {@link DS_FreeString()}. Returns NULL on error."] pub fn DS_SpeechToText (aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> * mut :: std :: os :: raw :: c_char ;
 
 }
  extern "C" {
-# [doc = " @brief Use the DeepSpeech model to perform Speech-To-Text and output metadata"] # [doc = " about the results."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model to use."] # [doc = " @param aBuffer A 16-bit, mono raw audio signal at the appropriate"] # [doc = "                sample rate (matching what the model was trained on)."] # [doc = " @param aBufferSize The number of samples in the audio signal."] # [doc = ""] # [doc = " @return Outputs a struct of individual letters along with their timing information."] # [doc = "         The user is responsible for freeing Metadata by calling {@link DS_FreeMetadata()}. Returns NULL on error."] pub fn DS_SpeechToTextWithMetadata (aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> * mut Metadata ;
+# [doc = " @brief Use the DeepSpeech model to convert speech to text and output results"] # [doc = " including metadata."] # [doc = ""] # [doc = " @param aCtx The ModelState pointer for the model to use."] # [doc = " @param aBuffer A 16-bit, mono raw audio signal at the appropriate"] # [doc = "                sample rate (matching what the model was trained on)."] # [doc = " @param aBufferSize The number of samples in the audio signal."] # [doc = " @param aNumResults The maximum number of CandidateTranscript structs to return. Returned value might be smaller than this."] # [doc = ""] # [doc = " @return Metadata struct containing multiple CandidateTranscript structs. Each"] # [doc = "         transcript has per-token metadata including timing information. The"] # [doc = "         user is responsible for freeing Metadata by calling {@link DS_FreeMetadata()}."] # [doc = "         Returns NULL on error."] pub fn DS_SpeechToTextWithMetadata (aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint , aNumResults : :: std :: os :: raw :: c_uint ,) -> * mut Metadata ;
 
 }
  extern "C" {
@@ -102,15 +112,19 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Compute the intermediate decoding of an ongoing streaming inference."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = ""] # [doc = " @return The STT intermediate result. The user is responsible for freeing the"] # [doc = "         string using {@link DS_FreeString()}."] pub fn DS_IntermediateDecode (aSctx : * mut StreamingState) -> * mut :: std :: os :: raw :: c_char ;
+# [doc = " @brief Compute the intermediate decoding of an ongoing streaming inference."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = ""] # [doc = " @return The STT intermediate result. The user is responsible for freeing the"] # [doc = "         string using {@link DS_FreeString()}."] pub fn DS_IntermediateDecode (aSctx : * const StreamingState) -> * mut :: std :: os :: raw :: c_char ;
 
 }
  extern "C" {
-# [doc = " @brief Signal the end of an audio signal to an ongoing streaming"] # [doc = "        inference, returns the STT result over the whole audio signal."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = ""] # [doc = " @return The STT result. The user is responsible for freeing the string using"] # [doc = "         {@link DS_FreeString()}."] # [doc = ""] # [doc = " @note This method will free the state pointer (@p aSctx)."] pub fn DS_FinishStream (aSctx : * mut StreamingState) -> * mut :: std :: os :: raw :: c_char ;
+# [doc = " @brief Compute the intermediate decoding of an ongoing streaming inference,"] # [doc = "        return results including metadata."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = " @param aNumResults The number of candidate transcripts to return."] # [doc = ""] # [doc = " @return Metadata struct containing multiple candidate transcripts. Each transcript"] # [doc = "         has per-token metadata including timing information. The user is"] # [doc = "         responsible for freeing Metadata by calling {@link DS_FreeMetadata()}."] # [doc = "         Returns NULL on error."] pub fn DS_IntermediateDecodeWithMetadata (aSctx : * const StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> * mut Metadata ;
 
 }
  extern "C" {
-# [doc = " @brief Signal the end of an audio signal to an ongoing streaming"] # [doc = "        inference, returns per-letter metadata."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = ""] # [doc = " @return Outputs a struct of individual letters along with their timing information."] # [doc = "         The user is responsible for freeing Metadata by calling {@link DS_FreeMetadata()}. Returns NULL on error."] # [doc = ""] # [doc = " @note This method will free the state pointer (@p aSctx)."] pub fn DS_FinishStreamWithMetadata (aSctx : * mut StreamingState) -> * mut Metadata ;
+# [doc = " @brief Compute the final decoding of an ongoing streaming inference and return"] # [doc = "        the result. Signals the end of an ongoing streaming inference."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = ""] # [doc = " @return The STT result. The user is responsible for freeing the string using"] # [doc = "         {@link DS_FreeString()}."] # [doc = ""] # [doc = " @note This method will free the state pointer (@p aSctx)."] pub fn DS_FinishStream (aSctx : * mut StreamingState) -> * mut :: std :: os :: raw :: c_char ;
+
+}
+ extern "C" {
+# [doc = " @brief Compute the final decoding of an ongoing streaming inference and return"] # [doc = "        results including metadata. Signals the end of an ongoing streaming"] # [doc = "        inference."] # [doc = ""] # [doc = " @param aSctx A streaming state pointer returned by {@link DS_CreateStream()}."] # [doc = " @param aNumResults The number of candidate transcripts to return."] # [doc = ""] # [doc = " @return Metadata struct containing multiple candidate transcripts. Each transcript"] # [doc = "         has per-token metadata including timing information. The user is"] # [doc = "         responsible for freeing Metadata by calling {@link DS_FreeMetadata()}."] # [doc = "         Returns NULL on error."] # [doc = ""] # [doc = " @note This method will free the state pointer (@p aSctx)."] pub fn DS_FinishStreamWithMetadata (aSctx : * mut StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> * mut Metadata ;
 
 }
  extern "C" {
@@ -126,6 +140,10 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 24usize , concat ! ( 
 
 }
  extern "C" {
-# [doc = " @brief Return version of this library. The returned version is a semantic version"] # [doc = "        (SemVer 2.0.0). The string returned must be freed with {@link DS_FreeString()}."] # [doc = ""] # [doc = " @return The version string."] pub fn DS_Version () -> * mut :: std :: os :: raw :: c_char ;
+# [doc = " @brief Returns the version of this library. The returned version is a semantic"] # [doc = "        version (SemVer 2.0.0). The string returned must be freed with {@link DS_FreeString()}."] # [doc = ""] # [doc = " @return The version string."] pub fn DS_Version () -> * mut :: std :: os :: raw :: c_char ;
+
+}
+ extern "C" {
+# [doc = " @brief Returns a textual description corresponding to an error code."] # [doc = "        The string returned must be freed with @{link DS_FreeString()}."] # [doc = ""] # [doc = " @return The error description."] pub fn DS_ErrorCodeToErrorMessage (aErrorCode : :: std :: os :: raw :: c_int ,) -> * mut :: std :: os :: raw :: c_char ;
 
 }
