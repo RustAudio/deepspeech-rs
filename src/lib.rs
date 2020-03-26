@@ -145,7 +145,8 @@ impl Model {
 	/// of the model files.
 	///
 	/// The `num_transcripts` param contains the maximum number of
-	/// `CandidateTranscript`s to return.
+	/// `CandidateTranscript`s to return. The actually returned number
+	/// might be smaller.
 	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16], num_transcripts :u16) -> Result<Metadata, ()> {
 		let ptr = unsafe {
 			ds::DS_SpeechToTextWithMetadata(
@@ -302,6 +303,10 @@ impl Stream {
 	}
 
 	/// Deallocates the stream and returns the extended metadata
+	///
+	/// The `num_transcripts` param contains the maximum number of
+	/// `CandidateTranscript`s to return. The actually returned number
+	/// might be smaller.
 	pub fn finish_with_metadata(self, num_transcripts :u32) -> Result<Metadata, ()> {
 		let ptr = unsafe {
 			ds::DS_FinishStreamWithMetadata(self.stream, num_transcripts as _)
