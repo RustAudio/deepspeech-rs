@@ -23,8 +23,13 @@ pub struct Metadata {
 }
 
 #[repr(transparent)]
-pub struct MetadataItem {
-	metadata_item :ds::MetadataItem,
+pub struct TokenMetadata {
+	metadata_item :ds::TokenMetadata,
+}
+
+#[repr(transparent)]
+pub struct CandidateTranscript {
+	transcript_item :ds::CandidateTranscript,
 }
 
 fn path_to_buf(p :&Path) -> Vec<u8> {
@@ -138,12 +143,16 @@ impl Model {
 	/// The input buffer must consist of mono 16-bit samples.
 	/// The sample rate is not freely chooseable but a property
 	/// of the model files.
-	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16]) -> Result<Metadata, ()> {
+	///
+	/// The `num_transcripts` param contains the maximum number of
+	/// `CandidateTranscript`s to return.
+	pub fn speech_to_text_with_metadata(&mut self, buffer :&[i16], num_transcripts :u16) -> Result<Metadata, ()> {
 		let ptr = unsafe {
 			ds::DS_SpeechToTextWithMetadata(
 				self.model,
 				buffer.as_ptr(),
-				buffer.len() as _)
+				buffer.len() as _,
+				num_transcripts as _)
 		};
 		Ok(Metadata {
 			metadata : ptr
@@ -185,51 +194,62 @@ impl Drop for Metadata {
 }
 
 impl Metadata {
-	pub fn items(&self) -> &[MetadataItem] {
+	pub fn transcripts(&self) -> &[CandidateTranscript] {
 		unsafe {
-			let ptr = (*self.metadata).items as * const MetadataItem;
-			slice::from_raw_parts(ptr, self.num_items() as usize)
+			let ptr = (*self.metadata).transcripts as * const CandidateTranscript;
+			slice::from_raw_parts(ptr, self.num_transcripts() as usize)
 		}
 	}
 
-	pub fn num_items(&self) -> i32 {
+	pub fn num_transcripts(&self) -> u32 {
 		unsafe {
-			(*self.metadata).num_items
-		}
-	}
-
-	pub fn confidence(&self) -> f64 {
-		unsafe {
-			(*self.metadata).confidence
+			(*self.metadata).num_transcripts
 		}
 	}
 }
 
-impl MetadataItem {
-	/// The character generated for transcription
-	pub fn character(&self) -> Result<&str, std::str::Utf8Error> {
+impl CandidateTranscript {
+	pub fn tokens(&self) -> &[TokenMetadata] {
 		unsafe {
-			let slice = CStr::from_ptr(self.metadata_item.character);
+			let ptr = self.transcript_item.tokens as * const TokenMetadata;
+			slice::from_raw_parts(ptr, self.num_tokens() as usize)
+		}
+	}
+
+	pub fn confidence(&self) -> f64 {
+		self.transcript_item.confidence
+	}
+
+	pub fn num_tokens(&self) -> u32 {
+		self.transcript_item.num_tokens
+	}
+}
+
+impl TokenMetadata {
+	/// The text of the token generated for transcription
+	pub fn text(&self) -> Result<&str, std::str::Utf8Error> {
+		unsafe {
+			let slice = CStr::from_ptr(self.metadata_item.text);
 			slice.to_str()
 		}
 	}
 
-	/// Position of the character in units of 20ms
-	pub fn timestep(&self) -> i32 {
+	/// Position of the token in units of 20ms
+	pub fn timestep(&self) -> u32 {
 		self.metadata_item.timestep
 	}
 
-	/// Position of the character in seconds
+	/// Position of the token in seconds
 	pub fn start_time(&self) -> f32 {
 		self.metadata_item.start_time
 	}
 }
 
-impl fmt::Display for Metadata {
+impl fmt::Display for CandidateTranscript {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let mut s = String::new();
-		for item in self.items() {
-			s += item.character().unwrap();
+		for token in self.tokens() {
+			s += token.text().unwrap();
 		}
 		write!(f, "{}", s)
 	}
@@ -282,9 +302,9 @@ impl Stream {
 	}
 
 	/// Deallocates the stream and returns the extended metadata
-	pub fn finish_with_metadata(self) -> Result<Metadata, ()> {
+	pub fn finish_with_metadata(self, num_transcripts :u32) -> Result<Metadata, ()> {
 		let ptr = unsafe {
-			ds::DS_FinishStreamWithMetadata(self.stream)
+			ds::DS_FinishStreamWithMetadata(self.stream, num_transcripts as _)
 		};
 		// Don't run the destructor for self,
 		// as DS_FinishStream already does it for us
