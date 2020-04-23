@@ -6,7 +6,7 @@ use std::env::args;
 use std::fs::File;
 
 use deepspeech::Model;
-use deepspeech::Metadata;
+use deepspeech::CandidateTranscript;
 use audrey::read::Reader;
 use audrey::sample::interpolate::{Converter, Linear};
 use audrey::sample::signal::{from_iter, Signal};
@@ -15,10 +15,10 @@ use audrey::sample::signal::{from_iter, Signal};
 // sample rate.
 const SAMPLE_RATE :u32 = 16_000;
 
-fn metadata_to_string(m: Metadata) -> String {
+fn transcript_to_string(tr :&CandidateTranscript) -> String {
 	let mut s = String::new();
-	for item in m.items() {
-		s += item.character().unwrap();
+	for token in tr.tokens() {
+		s += token.text().unwrap();
 	}
 	s
 }
@@ -59,7 +59,8 @@ fn main() {
 	};
 
 	// Run the speech to text algorithm
-	let result = metadata_to_string(m.speech_to_text_with_metadata(&audio_buf).unwrap());
+	let metadata = m.speech_to_text_with_metadata(&audio_buf, 1).unwrap();
+	let result = transcript_to_string(&metadata.transcripts()[0]);
 
 	// Output the result
 	println!("{}", result);
