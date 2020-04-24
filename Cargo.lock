@@ -112,19 +112,13 @@ name = "deepspeech"
 version = "0.7.0"
 dependencies = [
  "audrey",
- "deepspeech-sys 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "deepspeech-sys",
  "libc",
 ]
 
 [[package]]
 name = "deepspeech-sys"
 version = "0.7.0"
-
-[[package]]
-name = "deepspeech-sys"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d746a3eb90e7053c7ef3dff7825c68bcf396a3124c164d4c4456a3954914deb"
 
 [[package]]
 name = "glob"
