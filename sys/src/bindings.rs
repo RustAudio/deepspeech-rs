@@ -54,6 +54,11 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 16usize , concat ! ( 
  pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_SCORER : DeepSpeech_Error_Codes = 8194 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_MODEL_INCOMPATIBLE : DeepSpeech_Error_Codes = 8195 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_NOT_ENABLED : DeepSpeech_Error_Codes = 8196 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_UNREADABLE : DeepSpeech_Error_Codes = 8197 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_INVALID_LM : DeepSpeech_Error_Codes = 8198 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_NO_TRIE : DeepSpeech_Error_Codes = 8199 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_INVALID_TRIE : DeepSpeech_Error_Codes = 8200 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_VERSION_MISMATCH : DeepSpeech_Error_Codes = 8201 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_MMAP : DeepSpeech_Error_Codes = 12288 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_SESS : DeepSpeech_Error_Codes = 12289 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INTERPRETER : DeepSpeech_Error_Codes = 12290 ;
