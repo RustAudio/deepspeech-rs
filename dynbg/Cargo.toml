@@ -1,13 +1,14 @@
 [package]
-name = "bg"
-description = "Bindgen wrapper"
+name = "dynbg"
+version = "0.1.0"
+authors = ["Ilan Scheinkman"]
+edition = "2018"
+
+description = "Generates *unfinished* libloading-based wrapping code based on existing extern linking implementation."
 publish = false
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/RustAudio/deepspeech-rs"
-version = "0.1.0"
-authors = ["est31 <MTest31@outlook.com>"]
 
 [dependencies]
-bindgen = { version = "0.54", default-features = false, features = ["runtime"] }
 proc-macro2 = { version = "1.0", default-features = false }
 syn = {version = "1.0.33", features = ["full", "extra-traits"]}

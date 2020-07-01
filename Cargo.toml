@@ -1,5 +1,5 @@
 [workspace]
-members = ["sys", "bg"]
+members = ["sys", "bg", "dynbg"]
 
 [package]
 name = "deepspeech"
@@ -17,3 +17,9 @@ audrey = "0.2"
 [dependencies]
 libc = "0.2"
 deepspeech-sys = { path = "sys", version = "0.7.0" }
+libloading = {version = "0.6", optional = true}
+
+[features]
+default = []
+dynamic = ["libloading", "deepspeech-sys/dynamic"]
+no_static_bindings = []
