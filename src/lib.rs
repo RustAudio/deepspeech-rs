@@ -2,16 +2,22 @@
 Bindings to the DeepSpeech library
 */
 
-#[cfg(dynamic)]
+#[cfg(feature="dynamic")]
 pub mod dynamic;
+#[cfg(feature="dynamic")]
+mod dynamic_bindings;
 
+#[cfg(feature="dynamic")]
+extern crate libloading;
+#[cfg(feature="static_bindings")]
 extern crate deepspeech_sys;
+
 extern crate libc;
 
-#[cfg(not(no_static_bindings))]
-pub use static_bindings::*;
+#[cfg(feature="static_bindings")]
+pub use self::static_bindings::*;
 
-#[cfg(not(no_static_bindings))]
+#[cfg(feature="static_bindings")]
 mod static_bindings {
 
     use deepspeech_sys as ds;

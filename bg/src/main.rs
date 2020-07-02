@@ -197,5 +197,5 @@ fn main() {
 
     let out_path = PathBuf::from("sys/src");
     write_to_file(out_path.join("bindings.rs"), &bindings, false);
-    write_to_file(out_path.join("dynamic.rs"), &bindings, true);
+    write_to_file(PathBuf::from("src/dynamic_bindings.rs"), &bindings, true);
 }

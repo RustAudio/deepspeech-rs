@@ -1,7 +1,3 @@
-#![doc = "\nBindings to the DeepSpeech library\n"]
-extern crate deepspeech_sys;
-extern crate libc;
-use deepspeech_sys as ds;
 use std::ffi::CStr;
 use std::fmt;
 use std::mem::forget;
@@ -9,22 +5,21 @@ use std::ops::Drop;
 use std::path::Path;
 use std::ptr;
 use std::slice;
-
 pub struct Model {
-    library: std::sync::Arc<ds::dynamic::LibraryWrapper>,
-    model: *mut ds::dynamic::ModelState,
+    library: std::sync::Arc<crate::dynamic_bindings::LibraryWrapper>,
+    model: *mut crate::dynamic_bindings::ModelState,
 }
 pub struct Metadata {
-    library: std::sync::Arc<ds::dynamic::LibraryWrapper>,
-    metadata: *mut ds::dynamic::Metadata,
+    library: std::sync::Arc<crate::dynamic_bindings::LibraryWrapper>,
+    metadata: *mut crate::dynamic_bindings::Metadata,
 }
 #[repr(transparent)]
 pub struct TokenMetadata {
-    metadata_item: ds::TokenMetadata,
+    metadata_item: crate::dynamic_bindings::TokenMetadata,
 }
 #[repr(transparent)]
 pub struct CandidateTranscript {
-    transcript_item: ds::CandidateTranscript,
+    transcript_item: crate::dynamic_bindings::CandidateTranscript,
 }
 fn path_to_buf(p: &Path) -> Vec<u8> {
     let s = p.to_str().unwrap();
@@ -35,29 +30,33 @@ fn path_to_buf(p: &Path) -> Vec<u8> {
 }
 impl Model {
     #[doc = " Load a DeepSpeech model from the specified model file path"]
-    pub fn load_from_files(
-        library_path: impl AsRef<std::ffi::OsStr>,
-        model_path: &Path,
-    ) -> Result<Self, ()> {
+    pub fn load_from_files(model_path: &Path) -> Result<Self, ()> {
+        //LINE ADDED MANUALLY
         let library = std::sync::Arc::new(
-            ds::dynamic::LibraryWrapper::from_path(library_path).map_err(|_| ())?,
+            crate::dynamic_bindings::LibraryWrapper::from_path("libdeepspeech.so")
+                .map_err(|_| ())?,
         );
+
         let mp = path_to_buf(model_path);
         let mut model = ptr::null_mut();
         let ret = unsafe {
-            ds::dynamic::LibraryWrapper::DS_CreateModel(&library, mp.as_ptr() as _, &mut model)
-                .unwrap()
+            crate::dynamic_bindings::LibraryWrapper::DS_CreateModel(
+                &library, //MANUALLY CHANGED FROM `&self.library`
+                mp.as_ptr() as _,
+                &mut model,
+            )
+            .unwrap()
         };
         if ret != 0 {
             return Err(());
         }
-        Ok(Model { library, model })
+        Ok(Model { library, model }) //MANUALLY CHANGED FROM `Ok(Model { model })`
     }
     #[doc = " Enable decoding using an external scorer"]
     pub fn enable_external_scorer(&mut self, scorer_path: &Path) {
         let sp = path_to_buf(scorer_path);
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_EnableExternalScorer(
+            crate::dynamic_bindings::LibraryWrapper::DS_EnableExternalScorer(
                 &self.library,
                 self.model,
                 sp.as_ptr() as _,
@@ -68,8 +67,11 @@ impl Model {
     #[doc = " Disable decoding using an external scorer"]
     pub fn disable_external_scorer(&mut self) -> Result<(), ()> {
         let ret = unsafe {
-            ds::dynamic::LibraryWrapper::DS_DisableExternalScorer(&self.library, self.model)
-                .unwrap()
+            crate::dynamic_bindings::LibraryWrapper::DS_DisableExternalScorer(
+                &self.library,
+                self.model,
+            )
+            .unwrap()
         };
         if ret != 0 {
             Err(())
@@ -80,22 +82,29 @@ impl Model {
     #[doc = " Get sample rate expected by a model"]
     pub fn get_sample_rate(&self) -> i32 {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_GetModelSampleRate(&self.library, self.model).unwrap()
-                as _
+            crate::dynamic_bindings::LibraryWrapper::DS_GetModelSampleRate(
+                &self.library,
+                self.model,
+            )
+            .unwrap() as _
         }
     }
     #[doc = " Get beam width value the model is currently configured to use"]
     pub fn get_model_beam_width(&self) -> u16 {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_GetModelBeamWidth(&self.library, self.model).unwrap()
-                as _
+            crate::dynamic_bindings::LibraryWrapper::DS_GetModelBeamWidth(&self.library, self.model)
+                .unwrap() as _
         }
     }
     #[doc = " Set beam width value used by the model"]
     pub fn set_model_beam_width(&mut self, bw: u16) -> Result<(), ()> {
         let ret = unsafe {
-            ds::dynamic::LibraryWrapper::DS_SetModelBeamWidth(&self.library, self.model, bw as _)
-                .unwrap()
+            crate::dynamic_bindings::LibraryWrapper::DS_SetModelBeamWidth(
+                &self.library,
+                self.model,
+                bw as _,
+            )
+            .unwrap()
         };
         if ret != 0 {
             Err(())
@@ -106,7 +115,7 @@ impl Model {
     #[doc = " Set hyperparameters alpha and beta of the external scorer"]
     pub fn set_scorer_alpha_beta(&mut self, alpha: f32, beta: f32) -> Result<(), ()> {
         let ret = unsafe {
-            ds::dynamic::LibraryWrapper::DS_SetScorerAlphaBeta(
+            crate::dynamic_bindings::LibraryWrapper::DS_SetScorerAlphaBeta(
                 &self.library,
                 self.model,
                 alpha,
@@ -127,7 +136,7 @@ impl Model {
     #[doc = " of the model files."]
     pub fn speech_to_text(&mut self, buffer: &[i16]) -> Result<String, std::string::FromUtf8Error> {
         let r = unsafe {
-            let ptr = ds::dynamic::LibraryWrapper::DS_SpeechToText(
+            let ptr = crate::dynamic_bindings::LibraryWrapper::DS_SpeechToText(
                 &self.library,
                 self.model,
                 buffer.as_ptr(),
@@ -137,7 +146,7 @@ impl Model {
             let s = CStr::from_ptr(ptr);
             let mut v = Vec::new();
             v.extend_from_slice(s.to_bytes());
-            ds::dynamic::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
             v
         };
         String::from_utf8(r)
@@ -157,7 +166,7 @@ impl Model {
         num_transcripts: u16,
     ) -> Result<Metadata, ()> {
         let ptr = unsafe {
-            ds::dynamic::LibraryWrapper::DS_SpeechToTextWithMetadata(
+            crate::dynamic_bindings::LibraryWrapper::DS_SpeechToTextWithMetadata(
                 &self.library,
                 self.model,
                 buffer.as_ptr(),
@@ -166,8 +175,11 @@ impl Model {
             )
             .unwrap()
         };
+        //MANUALLY ADDED
+        let library = std::sync::Arc::clone(&self.library);
+        //MANUALLY CHANGED FROM `Ok(Metadata { metadata: ptr })`
         Ok(Metadata {
-            library: std::sync::Arc::clone(&self.library),
+            library,
             metadata: ptr,
         })
     }
@@ -175,14 +187,21 @@ impl Model {
     pub fn create_stream(&mut self) -> Result<Stream, ()> {
         let mut ptr = ptr::null_mut();
         let ret = unsafe {
-            ds::dynamic::LibraryWrapper::DS_CreateStream(&self.library, self.model, &mut ptr)
-                .unwrap()
+            crate::dynamic_bindings::LibraryWrapper::DS_CreateStream(
+                &self.library,
+                self.model,
+                &mut ptr,
+            )
+            .unwrap()
         };
         if ret != 0 {
             return Err(());
         }
+        //MANUALLY ADDED
+        let library = std::sync::Arc::clone(&self.library);
+        //MANUALLY CHANGED FROM `Ok(Stream { stream: ptr })`
         Ok(Stream {
-            library: std::sync::Arc::clone(&self.library),
+            library,
             stream: ptr,
         })
     }
@@ -190,14 +209,16 @@ impl Model {
 impl Drop for Model {
     fn drop(&mut self) {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_FreeModel(&self.library, self.model).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeModel(&self.library, self.model)
+                .unwrap();
         }
     }
 }
 impl Drop for Metadata {
     fn drop(&mut self) {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_FreeMetadata(&self.library, self.metadata).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeMetadata(&self.library, self.metadata)
+                .unwrap();
         }
     }
 }
@@ -253,8 +274,8 @@ impl fmt::Display for CandidateTranscript {
     }
 }
 pub struct Stream {
-    library: std::sync::Arc<ds::dynamic::LibraryWrapper>,
-    stream: *mut ds::dynamic::StreamingState,
+    library: std::sync::Arc<crate::dynamic_bindings::LibraryWrapper>,
+    stream: *mut crate::dynamic_bindings::StreamingState,
 }
 impl Stream {
     #[doc = " Feed audio samples to the stream"]
@@ -262,7 +283,7 @@ impl Stream {
     #[doc = " The input buffer must consist of mono 16-bit samples."]
     pub fn feed_audio(&mut self, buffer: &[i16]) {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_FeedAudioContent(
+            crate::dynamic_bindings::LibraryWrapper::DS_FeedAudioContent(
                 &self.library,
                 self.stream,
                 buffer.as_ptr(),
@@ -277,13 +298,15 @@ impl Stream {
     #[doc = " this function is non-trivial as the decoder can't do streaming yet."]
     pub fn intermediate_decode(&mut self) -> Result<String, std::string::FromUtf8Error> {
         let r = unsafe {
-            let ptr =
-                ds::dynamic::LibraryWrapper::DS_IntermediateDecode(&self.library, self.stream)
-                    .unwrap();
+            let ptr = crate::dynamic_bindings::LibraryWrapper::DS_IntermediateDecode(
+                &self.library,
+                self.stream,
+            )
+            .unwrap();
             let s = CStr::from_ptr(ptr);
             let mut v = Vec::new();
             v.extend_from_slice(s.to_bytes());
-            ds::dynamic::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
             v
         };
         String::from_utf8(r)
@@ -291,12 +314,15 @@ impl Stream {
     #[doc = " Deallocates the stream and returns the decoded text"]
     pub fn finish(self) -> Result<String, std::string::FromUtf8Error> {
         let r = unsafe {
-            let ptr =
-                ds::dynamic::LibraryWrapper::DS_FinishStream(&self.library, self.stream).unwrap();
+            let ptr = crate::dynamic_bindings::LibraryWrapper::DS_FinishStream(
+                &self.library,
+                self.stream,
+            )
+            .unwrap();
             let s = CStr::from_ptr(ptr);
             let mut v = Vec::new();
             v.extend_from_slice(s.to_bytes());
-            ds::dynamic::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeString(&self.library, ptr).unwrap();
             v
         };
         forget(self);
@@ -309,18 +335,26 @@ impl Stream {
     #[doc = " might be smaller."]
     pub fn finish_with_metadata(self, num_transcripts: u32) -> Result<Metadata, ()> {
         let ptr = unsafe {
-            ds::dynamic::LibraryWrapper::DS_FinishStreamWithMetadata(
+            crate::dynamic_bindings::LibraryWrapper::DS_FinishStreamWithMetadata(
                 &self.library,
                 self.stream,
                 num_transcripts as _,
             )
             .unwrap()
         };
-        let library = std::sync::Arc::clone(&self.library);
-        unsafe {
-            std::ptr::drop_in_place::<std::sync::Arc<libloading::Library>>(&self.library as *const _ as *mut _);
+        //MANUALLY ADDED
+        let library = {
+            let lib = std::sync::Arc::clone(&self.library);
+            unsafe {
+                std::ptr::drop_in_place(
+                    &self.library as *const _
+                        as *mut std::sync::Arc<crate::dynamic_bindings::LibraryWrapper>,
+                );
+            }
+            lib
         };
         forget(self);
+        //MANUALLY CHANGED FROM `Ok(Metadata { metadata: ptr })`
         Ok(Metadata {
             library,
             metadata: ptr,
@@ -330,20 +364,20 @@ impl Stream {
 impl Drop for Stream {
     fn drop(&mut self) {
         unsafe {
-            ds::dynamic::LibraryWrapper::DS_FreeStream(&self.library, self.stream).unwrap();
+            crate::dynamic_bindings::LibraryWrapper::DS_FreeStream(&self.library, self.stream)
+                .unwrap();
         }
     }
 }
 
-/*
-TODO: How?
+/* TODO: How should this be done?
 pub fn deepspeech_version() -> Result<String, std::string::FromUtf8Error> {
     let r = unsafe {
-        let ptr = ds::dynamic::LibraryWrapper::DS_Version();
+        let ptr = ds::DS_Version();
         let s = CStr::from_ptr(ptr);
         let mut v = Vec::new();
         v.extend_from_slice(s.to_bytes());
-        ds::dynamic::LibraryWrapper::DS_FreeString(ptr);
+        ds::DS_FreeString(ptr);
         v
     };
     String::from_utf8(r)

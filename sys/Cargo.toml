@@ -9,11 +9,3 @@ authors = ["est31 <MTest31@outlook.com>"]
 
 include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]
-
-[features]
-default = []
-dynamic = ["libloading"]
-no_static_bindings = []
-
-[dependencies]
-libloading = {version = "0.6", optional = true}

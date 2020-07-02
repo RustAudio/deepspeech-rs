@@ -12,8 +12,17 @@ fn main() {
     in_file.read_to_string(&mut raw_contents).unwrap();
     let mut tree = syn::parse_file(&raw_contents).unwrap();
 
-    let types_with_calls: HashSet<_> = tree
+    let static_version = tree
         .items
+        .iter_mut()
+        .find_map(|item| match item {
+            syn::Item::Mod(md) if md.ident.to_string() == "static_bindings" => {
+                md.content.as_mut().map(|(_, v)| v)
+            }
+            _ => None,
+        })
+        .unwrap();
+    let types_with_calls: HashSet<_> = static_version
         .iter_mut()
         .filter_map(|item| match item {
             syn::Item::Impl(m) => Some(m),
@@ -27,14 +36,12 @@ fn main() {
         })
         .collect();
 
-    let struct_declarations = tree
-        .items
+    let struct_declarations = static_version
         .iter_mut()
         .filter_map(|item| match item {
             syn::Item::Struct(strbdy) => Some(strbdy),
             _ => None,
-        })
-        .filter(|strbdy| types_with_calls.contains(&strbdy.ident));
+        });
 
     for strbdy in struct_declarations {
         match &mut strbdy.fields {
@@ -58,12 +65,16 @@ fn main() {
                         .first()
                         .map_or(false, |seg| seg.ident.to_string() == "ds");
                     if is_sys_call {
-                        typepath.path.segments.insert(1, syn::parse_quote!(dynamic));
+                        *typepath.path.segments.first_mut().unwrap() = syn::parse_quote!(crate);
+                        typepath.path.segments.insert(1, syn::parse_quote!(dynamic_bindings));
                     }
+                }
+                if !types_with_calls.contains(&strbdy.ident) {
+                    continue;
                 }
                 let vis: syn::Visibility = syn::parse_quote!();
                 let colon_token: syn::token::Colon = syn::parse_quote!(:);
-                let ty: syn::Type = syn::parse_quote!(std::sync::Arc<ds::dynamic::LibraryWrapper>);
+                let ty: syn::Type = syn::parse_quote!(std::sync::Arc<crate::dynamic_bindings::LibraryWrapper>);
                 let field = syn::Field {
                     attrs: Vec::new(),
                     vis,
@@ -79,7 +90,11 @@ fn main() {
     }
     let out_path = in_path.with_file_name("dynamic.rs");
     eprintln!("Got library types: {:?}", types_with_calls);
-    std::fs::write(out_path, format!("{}", tree.into_token_stream())).unwrap();
+    let outpt = static_version.into_iter()
+        .map(|stm| format!("{}\n", stm.into_token_stream()))
+        .filter(|s| !s.contains("deepspeech_sys"))
+        .collect::<String>();
+    std::fs::write(out_path, format!("{}", outpt)).unwrap();
 }
 
 /// Checks whether this struct will need a reference to the dynamic library,
@@ -106,7 +121,7 @@ fn visit_impl_method(meth: &mut syn::ImplItemMethod) -> bool {
 /// Visits a path in the tree passed to `should_add_library`.
 ///
 /// This is a terminal node: if the path starts with "ds" it gets mapped
-/// to "ds::dynamic::LibraryWrapper" and visit function returns `true`. Else, the function
+/// to "crate::dynamic_bindings::LibraryWrapper" and visit function returns `true`. Else, the function
 /// does nothing and returns `false`.
 fn visit_path(pt: &mut syn::ExprPath) -> bool {
     let is_sys_call = pt
@@ -115,7 +130,8 @@ fn visit_path(pt: &mut syn::ExprPath) -> bool {
         .first()
         .map_or(false, |seg| seg.ident.to_string() == "ds");
     if is_sys_call {
-        pt.path.segments.insert(1, syn::parse_quote!(dynamic));
+        *pt.path.segments.first_mut().unwrap() = syn::parse_quote!(crate);
+        pt.path.segments.insert(1, syn::parse_quote!(dynamic_bindings));
         pt.path
             .segments
             .insert(2, syn::parse_quote!(LibraryWrapper));

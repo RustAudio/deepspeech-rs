@@ -14,12 +14,15 @@ readme = "README.md"
 [dev-dependencies]
 audrey = "0.2"
 
+[dev-features]
+default=["static_bindings", "deepspeech-sys"]
+
 [dependencies]
 libc = "0.2"
-deepspeech-sys = { path = "sys", version = "0.7.0" }
+deepspeech-sys = { path = "sys", version = "0.7.0", optional=true }
 libloading = {version = "0.6", optional = true}
 
 [features]
-default = []
-dynamic = ["libloading", "deepspeech-sys/dynamic"]
-no_static_bindings = []
+default = ["static_bindings"]
+dynamic = ["libloading"]
+static_bindings = ["deepspeech-sys"]
