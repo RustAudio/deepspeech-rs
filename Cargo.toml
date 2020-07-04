@@ -14,9 +14,6 @@ readme = "README.md"
 [dev-dependencies]
 audrey = "0.2"
 
-[dev-features]
-default=["static_bindings", "deepspeech-sys"]
-
 [dependencies]
 libc = "0.2"
 deepspeech-sys = { path = "sys", version = "0.7.0", optional=true }

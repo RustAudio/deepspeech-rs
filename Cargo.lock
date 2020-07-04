@@ -123,14 +123,6 @@ name = "deepspeech-sys"
 version = "0.7.0"
 
 [[package]]
-name = "dynbg"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "syn",
-]
-
-[[package]]
 name = "glob"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
