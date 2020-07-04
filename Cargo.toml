@@ -1,5 +1,5 @@
 [workspace]
-members = ["sys", "bg", "dynbg"]
+members = ["sys", "bg"]
 
 [package]
 name = "deepspeech"
