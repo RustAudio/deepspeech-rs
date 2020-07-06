@@ -1,9 +1,0 @@
-language: rust
-rust:
-  - nightly
-  - beta
-  - stable
-script:
-  - cargo build --verbose
-  - cargo doc --verbose
-  - ./ci.sh
