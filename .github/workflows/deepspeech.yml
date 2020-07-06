@@ -3,16 +3,17 @@ name: deepspeech
 on: [push, pull_request]
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - name: Install stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-    - name: Run cargo build
-      run: cargo build --verbose
-    - name: Run cargo doc
-      run: cargo doc --verbose
-    - name: run ci.sh
-      run: ./ci.sh
+  ci-sh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Run cargo build
+        run: cargo build --verbose
+      - name: Run cargo doc
+        run: cargo doc --verbose
+      - name: run ci.sh
+        run: ./ci.sh
