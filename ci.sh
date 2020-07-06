@@ -7,6 +7,9 @@ set -e
 set -v
 
 dir=$(dirname "${BASH_SOURCE[0]}")
+echo "dir is $dir"
+ls $dir
+ls $dir/sys/deepspeech
 release="v$(cat $dir/sys/deepspeech/VERSION)"
 echo "release is $release"
 
