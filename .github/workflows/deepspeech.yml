@@ -3,14 +3,19 @@ name: deepspeech
 on: [push, pull_request]
 
 jobs:
-  ci-sh:
+  build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain: [stable, beta, nightly]
     steps:
       - uses: actions/checkout@v2
-      - name: Install stable
+        with:
+          submodules: true
+      - name: Install ${{ matrix.toolchain }}
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: ${{ matrix.toolchain }}
       - name: Run cargo build
         run: cargo build --verbose
       - name: Run cargo doc
