@@ -12,6 +12,11 @@ extern crate libloading;
 
 extern crate libc;
 
+#[cfg(any(feature = "static_bindings", feature = "dynamic"))]
+pub mod errors;
+#[cfg(any(feature = "static_bindings", feature = "dynamic"))]
+use errors::DeepspeechError;
+
 fn path_to_buf(p: &std::path::Path) -> Vec<u8> {
 	let s = p.to_str().unwrap();
 	let mut v = Vec::with_capacity(s.len());
@@ -35,7 +40,11 @@ macro_rules! impl_model {
 		}
 		impl Model {
 			/// Set hyperparameters alpha and beta of the external scorer
-			pub fn set_scorer_alpha_beta(&mut self, alpha: f32, beta: f32) -> Result<(), ()> {
+			pub fn set_scorer_alpha_beta(
+				&mut self,
+				alpha: f32,
+				beta: f32,
+			) -> Result<(), DeepspeechError> {
 				let ret = unsafe {
 					do_call_with_res!(
 						&self.library,
@@ -46,7 +55,7 @@ macro_rules! impl_model {
 					)
 				};
 				if ret != 0 {
-					Err(())
+					Err(ret.into())
 				} else {
 					Ok(())
 				}
@@ -75,24 +84,24 @@ macro_rules! impl_model {
 			}
 
 			/// Set beam width value used by the model
-			pub fn set_model_beam_width(&mut self, bw: u16) -> Result<(), ()> {
+			pub fn set_model_beam_width(&mut self, bw: u16) -> Result<(), DeepspeechError> {
 				let ret = unsafe {
 					do_call_with_res!(&self.library, DS_SetModelBeamWidth, self.model, bw as _)
 				};
 				if ret != 0 {
-					Err(())
+					Err(ret.into())
 				} else {
 					Ok(())
 				}
 			}
 
 			/// Disable decoding using an external scorer
-			pub fn disable_external_scorer(&mut self) -> Result<(), ()> {
+			pub fn disable_external_scorer(&mut self) -> Result<(), DeepspeechError> {
 				let ret = unsafe {
 					do_call_with_res!(&self.library, DS_DisableExternalScorer, self.model)
 				};
 				if ret != 0 {
-					Err(())
+					Err(ret.into())
 				} else {
 					Ok(())
 				}
@@ -103,10 +112,7 @@ macro_rules! impl_model {
 			/// The input buffer must consist of mono 16-bit samples.
 			/// The sample rate is not freely chooseable but a property
 			/// of the model files.
-			pub fn speech_to_text(
-				&mut self,
-				buffer: &[i16],
-			) -> Result<String, std::string::FromUtf8Error> {
+			pub fn speech_to_text(&mut self, buffer: &[i16]) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(
 						&self.library,
@@ -121,7 +127,7 @@ macro_rules! impl_model {
 					do_call!(&self.library, DS_FreeString, ptr);
 					v
 				};
-				String::from_utf8(r)
+				String::from_utf8(r).map_err(|e| e.into())
 			}
 			/// Perform speech-to-text using the model, getting extended metadata
 			///
@@ -136,7 +142,7 @@ macro_rules! impl_model {
 				&mut self,
 				buffer: &[i16],
 				num_transcripts: u16,
-			) -> Result<Metadata, ()> {
+			) -> Result<Metadata, DeepspeechError> {
 				let ptr = unsafe {
 					do_call_with_res!(
 						&self.library,
@@ -154,13 +160,13 @@ macro_rules! impl_model {
 			}
 
 			/// Set up a state for streaming inference
-			pub fn create_stream(&mut self) -> Result<Stream, ()> {
+			pub fn create_stream(&mut self) -> Result<Stream, DeepspeechError> {
 				let mut ptr = ptr::null_mut();
 				let ret = unsafe {
 					do_call_with_res!(&self.library, DS_CreateStream, self.model, &mut ptr)
 				};
 				if ret != 0 {
-					return Err(());
+					return Err(ret.into());
 				}
 				Ok(Stream {
 					library: self.library.clone(),
@@ -197,7 +203,7 @@ macro_rules! impl_stream {
 			///
 			/// Note that as of DeepSpeech version 0.2.0,
 			/// this function is non-trivial as the decoder can't do streaming yet.
-			pub fn intermediate_decode(&mut self) -> Result<String, std::string::FromUtf8Error> {
+			pub fn intermediate_decode(&mut self) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(&self.library, DS_IntermediateDecode, self.stream);
 					let s = CStr::from_ptr(ptr);
@@ -206,11 +212,11 @@ macro_rules! impl_stream {
 					do_call!(&self.library, DS_FreeString, ptr);
 					v
 				};
-				String::from_utf8(r)
+				String::from_utf8(r).map_err(|e| e.into())
 			}
 
 			/// Deallocates the stream and returns the decoded text
-			pub fn finish(self) -> Result<String, std::string::FromUtf8Error> {
+			pub fn finish(self) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(&self.library, DS_FinishStream, self.stream);
 					let s = CStr::from_ptr(ptr);
@@ -222,7 +228,7 @@ macro_rules! impl_stream {
 				// Don't run the destructor for self,
 				// as DS_FinishStream already does it for us
 				forget(self);
-				String::from_utf8(r)
+				String::from_utf8(r).map_err(|e| e.into())
 			}
 
 			/// Deallocates the stream and returns the extended metadata
@@ -230,7 +236,10 @@ macro_rules! impl_stream {
 			/// The `num_transcripts` param contains the maximum number of
 			/// `CandidateTranscript`s to return. The actually returned number
 			/// might be smaller.
-			pub fn finish_with_metadata(mut self, num_transcripts: u32) -> Result<Metadata, ()> {
+			pub fn finish_with_metadata(
+				mut self,
+				num_transcripts: u32,
+			) -> Result<Metadata, DeepspeechError> {
 				let ptr = unsafe {
 					do_call_with_res!(
 						&self.library,
@@ -356,7 +365,7 @@ macro_rules! impl_candidate_transcript {
 }
 macro_rules! impl_deepspeech_version {
 	($($libname:ident, $library:path)?) => {
-		pub fn deepspeech_version($($libname : $library),*) -> Result<String, std::string::FromUtf8Error> {
+		pub fn deepspeech_version($($libname : $library),*) -> Result<String, DeepspeechError> {
 			let r = unsafe {
 				let ptr = do_call!( (( $($libname)* )), DS_Version, );
 				let s = CStr::from_ptr(ptr);
@@ -365,7 +374,7 @@ macro_rules! impl_deepspeech_version {
 				do_call!((($($libname)*)), DS_FreeString, ptr);
 				v
 			};
-			String::from_utf8(r)
+			String::from_utf8(r).map_err(|e| e.into())
 		}
 	};
 }
@@ -384,7 +393,7 @@ mod static_bindings {
 	use std::ptr;
 	use std::slice;
 
-	use super::path_to_buf;
+	use super::{path_to_buf, DeepspeechError};
 
 	type Library = ();
 
@@ -408,12 +417,12 @@ mod static_bindings {
 
 	impl Model {
 		/// Load a DeepSpeech model from the specified model file path
-		pub fn load_from_files(model_path: &Path) -> Result<Self, ()> {
+		pub fn load_from_files(model_path: &Path) -> Result<Self, DeepspeechError> {
 			let mp = path_to_buf(model_path);
 			let mut model = ptr::null_mut();
 			let ret = unsafe { ds::DS_CreateModel(mp.as_ptr() as _, &mut model) };
 			if ret != 0 {
-				return Err(());
+				return Err(ret.into());
 			}
 			Ok(Model { library: (), model })
 		}
@@ -421,9 +430,11 @@ mod static_bindings {
 }
 
 #[cfg(feature = "dynamic")]
+/// Wrappers that allow for using an arbitrary `libdeepspeech.so` file at runtime via the `libloading` crate.
 pub mod dynamic {
-	use super::path_to_buf;
+	use super::{path_to_buf, DeepspeechError};
 	use crate::dynamic_bindings as ds;
+	pub use crate::dynamic_bindings::LibraryWrapper as Library;
 	use std::ffi::CStr;
 	use std::fmt;
 	use std::mem::forget;
@@ -431,7 +442,6 @@ pub mod dynamic {
 	use std::path::Path;
 	use std::ptr;
 	use std::slice;
-	pub use crate::dynamic_bindings::LibraryWrapper as Library;
 
 	macro_rules! do_call {
 		($this:expr, $f:ident, $($params:expr),*) => {{
@@ -440,7 +450,7 @@ pub mod dynamic {
 	}
 	macro_rules! do_call_with_res {
 		($this:expr, $f:ident, $($params:expr),*) => {{
-			ds::LibraryWrapper::$f(&$this, $($params),*).map_err(|_| ())?
+			ds::LibraryWrapper::$f(&$this, $($params),*)?
 		}}
 
 	}
@@ -452,21 +462,23 @@ pub mod dynamic {
 	impl_candidate_transcript!();
 	impl_deepspeech_version!(library, Library);
 	impl Model {
-
 		pub fn library(&self) -> Library {
 			self.library.clone()
 		}
 
 		/// Load a DeepSpeech model from the specified shared library and model file paths
-		pub fn load_from_files(library_path: &Path, model_path: &Path) -> Result<Self, ()> {
-			let library = ds::LibraryWrapper::from_path(library_path).map_err(|_| ())?;
+		pub fn load_from_files(
+			library_path: &Path,
+			model_path: &Path,
+		) -> Result<Self, DeepspeechError> {
+			let library = ds::LibraryWrapper::from_path(library_path)?;
 			let mp = path_to_buf(model_path);
 			let mut model = ptr::null_mut();
 			let ret = unsafe {
 				do_call_with_res!(&library, DS_CreateModel, mp.as_ptr() as _, &mut model)
 			};
 			if ret != 0 {
-				return Err(());
+				return Err(ret.into());
 			}
 			Ok(Model { library, model })
 		}
