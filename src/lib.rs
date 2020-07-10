@@ -61,15 +61,23 @@ macro_rules! impl_model {
 				}
 			}
 			/// Enable decoding using an external scorer
-			pub fn enable_external_scorer(&mut self, scorer_path: &Path) {
+			pub fn enable_external_scorer(
+				&mut self,
+				scorer_path: &Path,
+			) -> Result<(), DeepspeechError> {
 				let sp = path_to_buf(scorer_path);
-				unsafe {
-					do_call!(
+				let ret = unsafe {
+					do_call_with_res!(
 						&self.library,
 						DS_EnableExternalScorer,
 						self.model,
 						sp.as_ptr() as _
-					);
+					)
+				};
+				if ret != 0 {
+					Err(ret.into())
+				} else {
+					Ok(())
 				}
 			}
 
@@ -121,6 +129,9 @@ macro_rules! impl_model {
 						buffer.as_ptr(),
 						buffer.len() as _
 					);
+					if ptr.is_null() {
+						return Err(DeepspeechError::UnknownLibraryError(0));
+					}
 					let s = CStr::from_ptr(ptr);
 					let mut v = Vec::new();
 					v.extend_from_slice(s.to_bytes());
@@ -153,6 +164,9 @@ macro_rules! impl_model {
 						num_transcripts as _
 					)
 				};
+				if ptr.is_null() {
+					return Err(DeepspeechError::UnknownLibraryError(0));
+				}
 				Ok(Metadata {
 					library: self.library.clone(),
 					metadata: ptr,
@@ -206,6 +220,9 @@ macro_rules! impl_stream {
 			pub fn intermediate_decode(&mut self) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(&self.library, DS_IntermediateDecode, self.stream);
+					if ptr.is_null() {
+						return Err(DeepspeechError::UnknownLibraryError(0));
+					}
 					let s = CStr::from_ptr(ptr);
 					let mut v = Vec::new();
 					v.extend_from_slice(s.to_bytes());
@@ -219,6 +236,9 @@ macro_rules! impl_stream {
 			pub fn finish(self) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(&self.library, DS_FinishStream, self.stream);
+					if ptr.is_null() {
+						return Err(DeepspeechError::UnknownLibraryError(0));
+					}
 					let s = CStr::from_ptr(ptr);
 					let mut v = Vec::new();
 					v.extend_from_slice(s.to_bytes());
@@ -248,6 +268,9 @@ macro_rules! impl_stream {
 						num_transcripts as _
 					)
 				};
+				if ptr.is_null() {
+					return Err(DeepspeechError::UnknownLibraryError(0));
+				}
 				let library = self.library.clone();
 				unsafe {
 					std::ptr::drop_in_place(&mut self.library);
