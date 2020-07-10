@@ -233,7 +233,7 @@ macro_rules! impl_stream {
 			}
 
 			/// Deallocates the stream and returns the decoded text
-			pub fn finish(self) -> Result<String, DeepspeechError> {
+			pub fn finish(mut self) -> Result<String, DeepspeechError> {
 				let r = unsafe {
 					let ptr = do_call!(&self.library, DS_FinishStream, self.stream);
 					if ptr.is_null() {
@@ -245,6 +245,9 @@ macro_rules! impl_stream {
 					do_call!(&self.library, DS_FreeString, ptr);
 					v
 				};
+				unsafe {
+					std::ptr::drop_in_place(&mut self.library);
+				}
 				// Don't run the destructor for self,
 				// as DS_FinishStream already does it for us
 				forget(self);
