@@ -7,7 +7,7 @@ description = "Rust bindings to Mozilla's DeepSpeech STT implementation"
 license = "MIT OR Apache-2.0"
 documentation = "https://docs.rs/deepspeech"
 repository = "https://github.com/RustAudio/deepspeech-rs"
-version = "0.7.0"
+version = "0.8.0"
 authors = ["est31 <MTest31@outlook.com>"]
 readme = "README.md"
 
