@@ -301,6 +301,7 @@ macro_rules! impl_stream {
 macro_rules! impl_metadata {
 	() => {
 		pub struct Metadata {
+			#[allow(dead_code)]
 			library: Library,
 			metadata: *mut ds::Metadata,
 		}
