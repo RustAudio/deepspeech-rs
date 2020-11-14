@@ -16,8 +16,8 @@ audrey = "0.2"
 
 [dependencies]
 libc = "0.2"
-deepspeech-sys = { path = "sys", optional=true }
-libloading = {version = "0.6", optional = true}
+deepspeech-sys = { version = "0.9", path = "sys", optional = true }
+libloading = { version = "0.6", optional = true }
 
 [features]
 default = ["static_bindings"]
