@@ -27,11 +27,11 @@ All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) librar
 
 See DeepSpeech's [release announcement] for more.
 
-[release announcement]: https://github.com/mozilla/DeepSpeech/releases/tag/v0.8.0
+[release announcement]: https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.0
 
 ## Supported versions of DeepSpeech
 
-We currently support version `0.8.0` of the DeepSpeech library.
+We currently support version `0.9.0` of the DeepSpeech library.
 We will always try to provide compatibility with the most recent release possible.
 
 ## License
