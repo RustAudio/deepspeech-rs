@@ -47,27 +47,30 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 16usize , concat ! ( 
  assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . num_transcripts as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( num_transcripts ) )) ;
 
 }
- pub const STT_Error_Codes_STT_ERR_OK : STT_Error_Codes = 0 ;
- pub const STT_Error_Codes_STT_ERR_NO_MODEL : STT_Error_Codes = 4096 ;
- pub const STT_Error_Codes_STT_ERR_INVALID_ALPHABET : STT_Error_Codes = 8192 ;
- pub const STT_Error_Codes_STT_ERR_INVALID_SHAPE : STT_Error_Codes = 8193 ;
- pub const STT_Error_Codes_STT_ERR_INVALID_SCORER : STT_Error_Codes = 8194 ;
- pub const STT_Error_Codes_STT_ERR_MODEL_INCOMPATIBLE : STT_Error_Codes = 8195 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_NOT_ENABLED : STT_Error_Codes = 8196 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_UNREADABLE : STT_Error_Codes = 8197 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_INVALID_LM : STT_Error_Codes = 8198 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_NO_TRIE : STT_Error_Codes = 8199 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_INVALID_TRIE : STT_Error_Codes = 8200 ;
- pub const STT_Error_Codes_STT_ERR_SCORER_VERSION_MISMATCH : STT_Error_Codes = 8201 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_INIT_MMAP : STT_Error_Codes = 12288 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_INIT_SESS : STT_Error_Codes = 12289 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_INTERPRETER : STT_Error_Codes = 12290 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_RUN_SESS : STT_Error_Codes = 12291 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_CREATE_STREAM : STT_Error_Codes = 12292 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_READ_PROTOBUF : STT_Error_Codes = 12293 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_CREATE_SESS : STT_Error_Codes = 12294 ;
- pub const STT_Error_Codes_STT_ERR_FAIL_CREATE_MODEL : STT_Error_Codes = 12295 ;
- pub type STT_Error_Codes = u32 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_OK : DeepSpeech_Error_Codes = 0 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_NO_MODEL : DeepSpeech_Error_Codes = 4096 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_ALPHABET : DeepSpeech_Error_Codes = 8192 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_SHAPE : DeepSpeech_Error_Codes = 8193 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_INVALID_SCORER : DeepSpeech_Error_Codes = 8194 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_MODEL_INCOMPATIBLE : DeepSpeech_Error_Codes = 8195 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_NOT_ENABLED : DeepSpeech_Error_Codes = 8196 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_UNREADABLE : DeepSpeech_Error_Codes = 8197 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_INVALID_LM : DeepSpeech_Error_Codes = 8198 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_NO_TRIE : DeepSpeech_Error_Codes = 8199 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_INVALID_TRIE : DeepSpeech_Error_Codes = 8200 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_SCORER_VERSION_MISMATCH : DeepSpeech_Error_Codes = 8201 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_MMAP : DeepSpeech_Error_Codes = 12288 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INIT_SESS : DeepSpeech_Error_Codes = 12289 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INTERPRETER : DeepSpeech_Error_Codes = 12290 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_RUN_SESS : DeepSpeech_Error_Codes = 12291 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CREATE_STREAM : DeepSpeech_Error_Codes = 12292 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_READ_PROTOBUF : DeepSpeech_Error_Codes = 12293 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CREATE_SESS : DeepSpeech_Error_Codes = 12294 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CREATE_MODEL : DeepSpeech_Error_Codes = 12295 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INSERT_HOTWORD : DeepSpeech_Error_Codes = 12296 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CLEAR_HOTWORD : DeepSpeech_Error_Codes = 12297 ;
+ pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_ERASE_HOTWORD : DeepSpeech_Error_Codes = 12304 ;
+ pub type DeepSpeech_Error_Codes = u32 ;
  # [derive ( Clone )] pub struct LibraryWrapper {
 inner : std :: sync :: Arc < libloading :: Library > ,
 }
@@ -76,88 +79,100 @@ pub fn from_path (path : impl AsRef < std :: ffi :: OsStr >) -> Result < Self , 
 let inner = std :: sync :: Arc :: new (libloading :: Library :: new ( & path ) ?) ;
  Ok (Self { inner })
 }
- pub unsafe fn STT_ErrorCodeToErrorMessage (& self , aErrorCode : :: std :: os :: raw :: c_int ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (:: std :: os :: raw :: c_int) -> * mut :: std :: os :: raw :: c_char > (b"STT_ErrorCodeToErrorMessage\0") ? ;
+ pub unsafe fn DS_ErrorCodeToErrorMessage (& self , aErrorCode : :: std :: os :: raw :: c_int ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (:: std :: os :: raw :: c_int) -> * mut :: std :: os :: raw :: c_char > (b"DS_ErrorCodeToErrorMessage\0") ? ;
  Ok (dyn_symbol ( aErrorCode ))
 }
- pub unsafe fn STT_Version (& self ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn () -> * mut :: std :: os :: raw :: c_char > (b"STT_Version\0") ? ;
+ pub unsafe fn DS_Version (& self ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn () -> * mut :: std :: os :: raw :: c_char > (b"DS_Version\0") ? ;
  Ok (dyn_symbol ( ))
 }
- pub unsafe fn STT_FreeString (& self , str_ : * mut :: std :: os :: raw :: c_char) -> Result < () , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut :: std :: os :: raw :: c_char) -> () > (b"STT_FreeString\0") ? ;
+ pub unsafe fn DS_FreeString (& self , str_ : * mut :: std :: os :: raw :: c_char) -> Result < () , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut :: std :: os :: raw :: c_char) -> () > (b"DS_FreeString\0") ? ;
  Ok (dyn_symbol ( str_ ))
 }
- pub unsafe fn STT_FreeMetadata (& self , m : * mut Metadata) -> Result < () , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut Metadata) -> () > (b"STT_FreeMetadata\0") ? ;
+ pub unsafe fn DS_FreeMetadata (& self , m : * mut Metadata) -> Result < () , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut Metadata) -> () > (b"DS_FreeMetadata\0") ? ;
  Ok (dyn_symbol ( m ))
 }
- pub unsafe fn STT_FreeStream (& self , aSctx : * mut StreamingState) -> Result < () , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState) -> () > (b"STT_FreeStream\0") ? ;
+ pub unsafe fn DS_FreeStream (& self , aSctx : * mut StreamingState) -> Result < () , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState) -> () > (b"DS_FreeStream\0") ? ;
  Ok (dyn_symbol ( aSctx ))
 }
- pub unsafe fn STT_FinishStreamWithMetadata (& self , aSctx : * mut StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"STT_FinishStreamWithMetadata\0") ? ;
+ pub unsafe fn DS_FinishStreamWithMetadata (& self , aSctx : * mut StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"DS_FinishStreamWithMetadata\0") ? ;
  Ok (dyn_symbol ( aSctx , aNumResults ))
 }
- pub unsafe fn STT_FinishStream (& self , aSctx : * mut StreamingState) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState) -> * mut :: std :: os :: raw :: c_char > (b"STT_FinishStream\0") ? ;
+ pub unsafe fn DS_FinishStream (& self , aSctx : * mut StreamingState) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState) -> * mut :: std :: os :: raw :: c_char > (b"DS_FinishStream\0") ? ;
  Ok (dyn_symbol ( aSctx ))
 }
- pub unsafe fn STT_IntermediateDecodeWithMetadata (& self , aSctx : * const StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* const StreamingState , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"STT_IntermediateDecodeWithMetadata\0") ? ;
+ pub unsafe fn DS_IntermediateDecodeWithMetadata (& self , aSctx : * const StreamingState , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* const StreamingState , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"DS_IntermediateDecodeWithMetadata\0") ? ;
  Ok (dyn_symbol ( aSctx , aNumResults ))
 }
- pub unsafe fn STT_IntermediateDecode (& self , aSctx : * const StreamingState) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* const StreamingState) -> * mut :: std :: os :: raw :: c_char > (b"STT_IntermediateDecode\0") ? ;
+ pub unsafe fn DS_IntermediateDecode (& self , aSctx : * const StreamingState) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* const StreamingState) -> * mut :: std :: os :: raw :: c_char > (b"DS_IntermediateDecode\0") ? ;
  Ok (dyn_symbol ( aSctx ))
 }
- pub unsafe fn STT_FeedAudioContent (& self , aSctx : * mut StreamingState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> Result < () , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint) -> () > (b"STT_FeedAudioContent\0") ? ;
+ pub unsafe fn DS_FeedAudioContent (& self , aSctx : * mut StreamingState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> Result < () , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut StreamingState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint) -> () > (b"DS_FeedAudioContent\0") ? ;
  Ok (dyn_symbol ( aSctx , aBuffer , aBufferSize ))
 }
- pub unsafe fn STT_CreateStream (& self , aCtx : * mut ModelState , retval : * mut * mut StreamingState ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * mut * mut StreamingState) -> :: std :: os :: raw :: c_int > (b"STT_CreateStream\0") ? ;
+ pub unsafe fn DS_CreateStream (& self , aCtx : * mut ModelState , retval : * mut * mut StreamingState ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * mut * mut StreamingState) -> :: std :: os :: raw :: c_int > (b"DS_CreateStream\0") ? ;
  Ok (dyn_symbol ( aCtx , retval ))
 }
- pub unsafe fn STT_SpeechToTextWithMetadata (& self , aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"STT_SpeechToTextWithMetadata\0") ? ;
+ pub unsafe fn DS_SpeechToTextWithMetadata (& self , aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint , aNumResults : :: std :: os :: raw :: c_uint ,) -> Result < * mut Metadata , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint , :: std :: os :: raw :: c_uint) -> * mut Metadata > (b"DS_SpeechToTextWithMetadata\0") ? ;
  Ok (dyn_symbol ( aCtx , aBuffer , aBufferSize , aNumResults ))
 }
- pub unsafe fn STT_SpeechToText (& self , aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint) -> * mut :: std :: os :: raw :: c_char > (b"STT_SpeechToText\0") ? ;
+ pub unsafe fn DS_SpeechToText (& self , aCtx : * mut ModelState , aBuffer : * const :: std :: os :: raw :: c_short , aBufferSize : :: std :: os :: raw :: c_uint ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_short , :: std :: os :: raw :: c_uint) -> * mut :: std :: os :: raw :: c_char > (b"DS_SpeechToText\0") ? ;
  Ok (dyn_symbol ( aCtx , aBuffer , aBufferSize ))
 }
- pub unsafe fn STT_SetScorerAlphaBeta (& self , aCtx : * mut ModelState , aAlpha : f32 , aBeta : f32 ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , f32 , f32) -> :: std :: os :: raw :: c_int > (b"STT_SetScorerAlphaBeta\0") ? ;
+ pub unsafe fn DS_SetScorerAlphaBeta (& self , aCtx : * mut ModelState , aAlpha : f32 , aBeta : f32 ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , f32 , f32) -> :: std :: os :: raw :: c_int > (b"DS_SetScorerAlphaBeta\0") ? ;
  Ok (dyn_symbol ( aCtx , aAlpha , aBeta ))
 }
- pub unsafe fn STT_DisableExternalScorer (& self , aCtx : * mut ModelState) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState) -> :: std :: os :: raw :: c_int > (b"STT_DisableExternalScorer\0") ? ;
+ pub unsafe fn DS_DisableExternalScorer (& self , aCtx : * mut ModelState) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState) -> :: std :: os :: raw :: c_int > (b"DS_DisableExternalScorer\0") ? ;
  Ok (dyn_symbol ( aCtx ))
 }
- pub unsafe fn STT_EnableExternalScorer (& self , aCtx : * mut ModelState , aScorerPath : * const :: std :: os :: raw :: c_char ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_char) -> :: std :: os :: raw :: c_int > (b"STT_EnableExternalScorer\0") ? ;
+ pub unsafe fn DS_ClearHotWords (& self , aCtx : * mut ModelState) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState) -> :: std :: os :: raw :: c_int > (b"DS_ClearHotWords\0") ? ;
+ Ok (dyn_symbol ( aCtx ))
+}
+ pub unsafe fn DS_EraseHotWord (& self , aCtx : * mut ModelState , word : * const :: std :: os :: raw :: c_char ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_char) -> :: std :: os :: raw :: c_int > (b"DS_EraseHotWord\0") ? ;
+ Ok (dyn_symbol ( aCtx , word ))
+}
+ pub unsafe fn DS_AddHotWord (& self , aCtx : * mut ModelState , word : * const :: std :: os :: raw :: c_char , boost : f32 ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_char , f32) -> :: std :: os :: raw :: c_int > (b"DS_AddHotWord\0") ? ;
+ Ok (dyn_symbol ( aCtx , word , boost ))
+}
+ pub unsafe fn DS_EnableExternalScorer (& self , aCtx : * mut ModelState , aScorerPath : * const :: std :: os :: raw :: c_char ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , * const :: std :: os :: raw :: c_char) -> :: std :: os :: raw :: c_int > (b"DS_EnableExternalScorer\0") ? ;
  Ok (dyn_symbol ( aCtx , aScorerPath ))
 }
- pub unsafe fn STT_FreeModel (& self , ctx : * mut ModelState) -> Result < () , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState) -> () > (b"STT_FreeModel\0") ? ;
+ pub unsafe fn DS_FreeModel (& self , ctx : * mut ModelState) -> Result < () , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState) -> () > (b"DS_FreeModel\0") ? ;
  Ok (dyn_symbol ( ctx ))
 }
- pub unsafe fn STT_GetModelSampleRate (& self , aCtx : * const ModelState) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* const ModelState) -> :: std :: os :: raw :: c_int > (b"STT_GetModelSampleRate\0") ? ;
+ pub unsafe fn DS_GetModelSampleRate (& self , aCtx : * const ModelState) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* const ModelState) -> :: std :: os :: raw :: c_int > (b"DS_GetModelSampleRate\0") ? ;
  Ok (dyn_symbol ( aCtx ))
 }
- pub unsafe fn STT_SetModelBeamWidth (& self , aCtx : * mut ModelState , aBeamWidth : :: std :: os :: raw :: c_uint ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , :: std :: os :: raw :: c_uint) -> :: std :: os :: raw :: c_int > (b"STT_SetModelBeamWidth\0") ? ;
+ pub unsafe fn DS_SetModelBeamWidth (& self , aCtx : * mut ModelState , aBeamWidth : :: std :: os :: raw :: c_uint ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* mut ModelState , :: std :: os :: raw :: c_uint) -> :: std :: os :: raw :: c_int > (b"DS_SetModelBeamWidth\0") ? ;
  Ok (dyn_symbol ( aCtx , aBeamWidth ))
 }
- pub unsafe fn STT_GetModelBeamWidth (& self , aCtx : * const ModelState) -> Result < :: std :: os :: raw :: c_uint , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* const ModelState) -> :: std :: os :: raw :: c_uint > (b"STT_GetModelBeamWidth\0") ? ;
+ pub unsafe fn DS_GetModelBeamWidth (& self , aCtx : * const ModelState) -> Result < :: std :: os :: raw :: c_uint , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* const ModelState) -> :: std :: os :: raw :: c_uint > (b"DS_GetModelBeamWidth\0") ? ;
  Ok (dyn_symbol ( aCtx ))
 }
- pub unsafe fn STT_CreateModel (& self , aModelPath : * const :: std :: os :: raw :: c_char , retval : * mut * mut ModelState ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
-let dyn_symbol = self . inner . get :: < unsafe extern fn (* const :: std :: os :: raw :: c_char , * mut * mut ModelState) -> :: std :: os :: raw :: c_int > (b"STT_CreateModel\0") ? ;
+ pub unsafe fn DS_CreateModel (& self , aModelPath : * const :: std :: os :: raw :: c_char , retval : * mut * mut ModelState ,) -> Result < :: std :: os :: raw :: c_int , libloading :: Error > {
+let dyn_symbol = self . inner . get :: < unsafe extern fn (* const :: std :: os :: raw :: c_char , * mut * mut ModelState) -> :: std :: os :: raw :: c_int > (b"DS_CreateModel\0") ? ;
  Ok (dyn_symbol ( aModelPath , retval ))
 }
 

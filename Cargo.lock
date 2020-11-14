@@ -110,7 +110,7 @@ checksum = "f86c952727a495bda7abaf09bafdee1a939194dd793d9a8e26281df55ac43b00"
 
 [[package]]
 name = "deepspeech"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "audrey",
  "deepspeech-sys",
@@ -120,7 +120,7 @@ dependencies = [
 
 [[package]]
 name = "deepspeech-sys"
-version = "0.8.0"
+version = "0.9.0"
 
 [[package]]
 name = "glob"
