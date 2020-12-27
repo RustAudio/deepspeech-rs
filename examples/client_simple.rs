@@ -29,26 +29,28 @@ fn main() {
 	let audio_file_path = args().nth(2)
 		.expect("Please specify an audio file to run STT on");
 	let dir_path = Path::new(&model_dir_str);
-	let mut graph_name: String = String::from("output_graph.pb");
-	let mut scorer_name: Option<String> = None;
+	let mut graph_name: Box<Path> = dir_path.join("output_graph.pb").into_boxed_path();
+	let mut scorer_name: Option<Box<Path>> = None;
 	// search for model in model directory
 	for file in dir_path.read_dir().expect("Specified model dir is not a dir") {
 		if let Ok(f) = file {
-			if f.file_type().unwrap().is_file() {
-				let file_name = f.file_name().into_string().unwrap();
-				if file_name.ends_with(".pb") || file_name.ends_with(".pbmm") {
-					graph_name = file_name;
-				} else if file_name.ends_with(".scorer") {
-					scorer_name = Some(file_name);
+			let file_path = f.path();
+			if file_path.is_file() {
+				if let Some(ext) = file_path.extension() {
+					if ext == "pb" || ext == "pbmm" {
+						graph_name = file_path.into_boxed_path();
+					} else if ext == "scorer" {
+						scorer_name = Some(file_path.into_boxed_path());
+					}
 				}
 			}
 		}
 	}
-	let mut m = Model::load_from_files(&dir_path.join(&graph_name)).unwrap();
+	let mut m = Model::load_from_files(&graph_name).unwrap();
 	// enable external scorer if found in the model folder
 	if let Some(scorer) = scorer_name {
-		println!("Using external scorer `{}`", scorer);
-		m.enable_external_scorer(&dir_path.join(&scorer)).unwrap();
+		println!("Using external scorer `{}`", scorer.to_str().unwrap());
+		m.enable_external_scorer(&scorer).unwrap();
 	}
 
 	let audio_file = File::open(audio_file_path).unwrap();
