@@ -31,7 +31,27 @@ fn main() {
 	let audio_file_path = args().nth(2)
 		.expect("Please specify an audio file to run STT on");
 	let dir_path = Path::new(&model_dir_str);
-	let mut m = Model::load_from_files(&dir_path.join("output_graph.pb")).unwrap();
+	let mut graph_name: String = String::from("output_graph.pb");
+	let mut scorer_name: Option<String> = None;
+	// search for model in model directory
+	for file in dir_path.read_dir().expect("Specified model dir is not a dir") {
+		if let Ok(f) = file {
+			if f.file_type().unwrap().is_file() {
+				let file_name = f.file_name().into_string().unwrap();
+				if file_name.ends_with(".pb") || file_name.ends_with(".pbmm") {
+					graph_name = file_name;
+				} else if file_name.ends_with(".scorer") {
+					scorer_name = Some(file_name);
+				}
+			}
+		}
+	}
+	let mut m = Model::load_from_files(&dir_path.join(&graph_name)).unwrap();
+	// enable external scorer if found in the model folder
+	if let Some(scorer) = scorer_name {
+		println!("Using external scorer `{}`", scorer);
+		m.enable_external_scorer(&dir_path.join(&scorer)).unwrap();
+	}
 
 	let initialized_time = Instant::now();
 	println!("Model initialized in {:?}.", initialized_time - start);
