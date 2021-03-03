@@ -1,11 +1,12 @@
 extern crate bindgen;
 extern crate proc_macro2;
 extern crate syn;
+extern crate quote;
 
 use proc_macro2::{Delimiter, Spacing, TokenStream, TokenTree};
+use quote::ToTokens;
 use std::path::Path;
 use std::path::PathBuf;
-use syn::export::ToTokens;
 
 /// Get the function bindings that will either need to be attached to a dynamic library object
 /// or re-created into an `extern "C"` block.
@@ -131,7 +132,7 @@ fn write_to_file(path: impl AsRef<Path>, bindings: &bindgen::Bindings, dynamic: 
 	let externs = get_binding_functions(&mut file);
 	let mapped = construct_bindings(externs, dynamic);
 	file.items.extend(mapped.into_iter());
-	let output_text = add_spacings(file.into_token_stream());
+	let output_text = add_spacings(file.to_token_stream());
 	std::fs::write(path, output_text.as_bytes()).unwrap();
 }
 
