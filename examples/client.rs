@@ -1,5 +1,7 @@
 extern crate deepspeech;
 extern crate audrey;
+extern crate dasp_interpolate;
+extern crate dasp_signal;
 
 use std::path::Path;
 use std::env::args;
@@ -8,8 +10,8 @@ use std::time::Instant;
 
 use deepspeech::Model;
 use audrey::read::Reader;
-use audrey::sample::interpolate::{Converter, Linear};
-use audrey::sample::signal::{from_iter, Signal};
+use dasp_interpolate::linear::Linear;
+use dasp_signal::{from_iter, Signal, interpolate::Converter};
 
 // The model has been trained on this specific
 // sample rate.

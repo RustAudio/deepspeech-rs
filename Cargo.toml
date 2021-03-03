@@ -12,12 +12,14 @@ authors = ["est31 <MTest31@outlook.com>"]
 readme = "README.md"
 
 [dev-dependencies]
-audrey = "0.2"
+audrey = "0.3"
+dasp_interpolate = { version = "0.11", features = ["linear"] }
+dasp_signal = "0.11"
 
 [dependencies]
 libc = "0.2"
 deepspeech-sys = { version = "0.9", path = "sys", optional = true }
-libloading = { version = "0.6", optional = true }
+libloading = { version = "0.7", optional = true }
 
 [features]
 default = ["static_bindings"]
