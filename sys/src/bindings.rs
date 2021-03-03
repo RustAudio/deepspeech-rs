@@ -1,50 +1,50 @@
 pub type size_t = :: std :: os :: raw :: c_ulong ;
- # [repr ( C )] # [repr ( align ( 16 ) )] # [derive ( Debug , Copy , Clone )] pub struct max_align_t {
+ # [repr (C)] # [repr (align (16))] # [derive (Debug , Copy , Clone)] pub struct max_align_t {
 pub __clang_max_align_nonce1 : :: std :: os :: raw :: c_longlong , pub __bindgen_padding_0 : u64 , pub __clang_max_align_nonce2 : u128 ,
 }
  # [test] fn bindgen_test_layout_max_align_t () {
-assert_eq ! (:: std :: mem :: size_of ::< max_align_t > ( ) , 32usize , concat ! ( "Size of: " , stringify ! ( max_align_t ) )) ;
- assert_eq ! (:: std :: mem :: align_of ::< max_align_t > ( ) , 16usize , concat ! ( "Alignment of " , stringify ! ( max_align_t ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< max_align_t > ( ) ) ) . __clang_max_align_nonce1 as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( max_align_t ) , "::" , stringify ! ( __clang_max_align_nonce1 ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< max_align_t > ( ) ) ) . __clang_max_align_nonce2 as * const _ as usize } , 16usize , concat ! ( "Offset of field: " , stringify ! ( max_align_t ) , "::" , stringify ! ( __clang_max_align_nonce2 ) )) ;
+assert_eq ! (:: std :: mem :: size_of ::< max_align_t > () , 32usize , concat ! ("Size of: " , stringify ! (max_align_t))) ;
+ assert_eq ! (:: std :: mem :: align_of ::< max_align_t > () , 16usize , concat ! ("Alignment of " , stringify ! (max_align_t))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< max_align_t > ())) . __clang_max_align_nonce1 as * const _ as usize } , 0usize , concat ! ("Offset of field: " , stringify ! (max_align_t) , "::" , stringify ! (__clang_max_align_nonce1))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< max_align_t > ())) . __clang_max_align_nonce2 as * const _ as usize } , 16usize , concat ! ("Offset of field: " , stringify ! (max_align_t) , "::" , stringify ! (__clang_max_align_nonce2))) ;
 
 }
- # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct ModelState {
+ # [repr (C)] # [derive (Debug , Copy , Clone)] pub struct ModelState {
 _unused : [u8 ; 0] ,
 }
- # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct StreamingState {
+ # [repr (C)] # [derive (Debug , Copy , Clone)] pub struct StreamingState {
 _unused : [u8 ; 0] ,
 }
- # [doc = " @brief Stores text of an individual token, along with its timing information"] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct TokenMetadata {
+ # [doc = " @brief Stores text of an individual token, along with its timing information"] # [repr (C)] # [derive (Debug , Copy , Clone)] pub struct TokenMetadata {
 # [doc = " The text corresponding to this token"] pub text : * const :: std :: os :: raw :: c_char , # [doc = " Position of the token in units of 20ms"] pub timestep : :: std :: os :: raw :: c_uint , # [doc = " Position of the token in seconds"] pub start_time : f32 ,
 }
  # [test] fn bindgen_test_layout_TokenMetadata () {
-assert_eq ! (:: std :: mem :: size_of ::< TokenMetadata > ( ) , 16usize , concat ! ( "Size of: " , stringify ! ( TokenMetadata ) )) ;
- assert_eq ! (:: std :: mem :: align_of ::< TokenMetadata > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( TokenMetadata ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . text as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( text ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . timestep as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( timestep ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< TokenMetadata > ( ) ) ) . start_time as * const _ as usize } , 12usize , concat ! ( "Offset of field: " , stringify ! ( TokenMetadata ) , "::" , stringify ! ( start_time ) )) ;
+assert_eq ! (:: std :: mem :: size_of ::< TokenMetadata > () , 16usize , concat ! ("Size of: " , stringify ! (TokenMetadata))) ;
+ assert_eq ! (:: std :: mem :: align_of ::< TokenMetadata > () , 8usize , concat ! ("Alignment of " , stringify ! (TokenMetadata))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< TokenMetadata > ())) . text as * const _ as usize } , 0usize , concat ! ("Offset of field: " , stringify ! (TokenMetadata) , "::" , stringify ! (text))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< TokenMetadata > ())) . timestep as * const _ as usize } , 8usize , concat ! ("Offset of field: " , stringify ! (TokenMetadata) , "::" , stringify ! (timestep))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< TokenMetadata > ())) . start_time as * const _ as usize } , 12usize , concat ! ("Offset of field: " , stringify ! (TokenMetadata) , "::" , stringify ! (start_time))) ;
 
 }
- # [doc = " @brief A single transcript computed by the model, including a confidence"] # [doc = "        value and the metadata for its constituent tokens."] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct CandidateTranscript {
+ # [doc = " @brief A single transcript computed by the model, including a confidence"] # [doc = "        value and the metadata for its constituent tokens."] # [repr (C)] # [derive (Debug , Copy , Clone)] pub struct CandidateTranscript {
 # [doc = " Array of TokenMetadata objects"] pub tokens : * const TokenMetadata , # [doc = " Size of the tokens array"] pub num_tokens : :: std :: os :: raw :: c_uint , # [doc = " Approximated confidence value for this transcript. This is roughly the"] # [doc = " sum of the acoustic model logit values for each timestep/character that"] # [doc = " contributed to the creation of this transcript."] pub confidence : f64 ,
 }
  # [test] fn bindgen_test_layout_CandidateTranscript () {
-assert_eq ! (:: std :: mem :: size_of ::< CandidateTranscript > ( ) , 24usize , concat ! ( "Size of: " , stringify ! ( CandidateTranscript ) )) ;
- assert_eq ! (:: std :: mem :: align_of ::< CandidateTranscript > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( CandidateTranscript ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . tokens as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( tokens ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . num_tokens as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( num_tokens ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< CandidateTranscript > ( ) ) ) . confidence as * const _ as usize } , 16usize , concat ! ( "Offset of field: " , stringify ! ( CandidateTranscript ) , "::" , stringify ! ( confidence ) )) ;
+assert_eq ! (:: std :: mem :: size_of ::< CandidateTranscript > () , 24usize , concat ! ("Size of: " , stringify ! (CandidateTranscript))) ;
+ assert_eq ! (:: std :: mem :: align_of ::< CandidateTranscript > () , 8usize , concat ! ("Alignment of " , stringify ! (CandidateTranscript))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< CandidateTranscript > ())) . tokens as * const _ as usize } , 0usize , concat ! ("Offset of field: " , stringify ! (CandidateTranscript) , "::" , stringify ! (tokens))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< CandidateTranscript > ())) . num_tokens as * const _ as usize } , 8usize , concat ! ("Offset of field: " , stringify ! (CandidateTranscript) , "::" , stringify ! (num_tokens))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< CandidateTranscript > ())) . confidence as * const _ as usize } , 16usize , concat ! ("Offset of field: " , stringify ! (CandidateTranscript) , "::" , stringify ! (confidence))) ;
 
 }
- # [doc = " @brief An array of CandidateTranscript objects computed by the model."] # [repr ( C )] # [derive ( Debug , Copy , Clone )] pub struct Metadata {
+ # [doc = " @brief An array of CandidateTranscript objects computed by the model."] # [repr (C)] # [derive (Debug , Copy , Clone)] pub struct Metadata {
 # [doc = " Array of CandidateTranscript objects"] pub transcripts : * const CandidateTranscript , # [doc = " Size of the transcripts array"] pub num_transcripts : :: std :: os :: raw :: c_uint ,
 }
  # [test] fn bindgen_test_layout_Metadata () {
-assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 16usize , concat ! ( "Size of: " , stringify ! ( Metadata ) )) ;
- assert_eq ! (:: std :: mem :: align_of ::< Metadata > ( ) , 8usize , concat ! ( "Alignment of " , stringify ! ( Metadata ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . transcripts as * const _ as usize } , 0usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( transcripts ) )) ;
- assert_eq ! (unsafe { & ( * ( :: std :: ptr :: null ::< Metadata > ( ) ) ) . num_transcripts as * const _ as usize } , 8usize , concat ! ( "Offset of field: " , stringify ! ( Metadata ) , "::" , stringify ! ( num_transcripts ) )) ;
+assert_eq ! (:: std :: mem :: size_of ::< Metadata > () , 16usize , concat ! ("Size of: " , stringify ! (Metadata))) ;
+ assert_eq ! (:: std :: mem :: align_of ::< Metadata > () , 8usize , concat ! ("Alignment of " , stringify ! (Metadata))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< Metadata > ())) . transcripts as * const _ as usize } , 0usize , concat ! ("Offset of field: " , stringify ! (Metadata) , "::" , stringify ! (transcripts))) ;
+ assert_eq ! (unsafe { & (* (:: std :: ptr :: null ::< Metadata > ())) . num_transcripts as * const _ as usize } , 8usize , concat ! ("Offset of field: " , stringify ! (Metadata) , "::" , stringify ! (num_transcripts))) ;
 
 }
  pub const DeepSpeech_Error_Codes_DS_ERR_OK : DeepSpeech_Error_Codes = 0 ;
@@ -70,7 +70,7 @@ assert_eq ! (:: std :: mem :: size_of ::< Metadata > ( ) , 16usize , concat ! ( 
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_INSERT_HOTWORD : DeepSpeech_Error_Codes = 12296 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_CLEAR_HOTWORD : DeepSpeech_Error_Codes = 12297 ;
  pub const DeepSpeech_Error_Codes_DS_ERR_FAIL_ERASE_HOTWORD : DeepSpeech_Error_Codes = 12304 ;
- pub type DeepSpeech_Error_Codes = u32 ;
+ pub type DeepSpeech_Error_Codes = :: std :: os :: raw :: c_uint ;
  extern "C" {
 # [doc = " @brief Returns a textual description corresponding to an error code."] # [doc = "        The string returned must be freed with @{link DS_FreeString()}."] # [doc = ""] # [doc = " @return The error description."] pub fn DS_ErrorCodeToErrorMessage (aErrorCode : :: std :: os :: raw :: c_int ,) -> * mut :: std :: os :: raw :: c_char ;
  # [doc = " @brief Returns the version of this library. The returned version is a semantic"] # [doc = "        version (SemVer 2.0.0). The string returned must be freed with {@link DS_FreeString()}."] # [doc = ""] # [doc = " @return The version string."] pub fn DS_Version () -> * mut :: std :: os :: raw :: c_char ;
