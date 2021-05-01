@@ -37,7 +37,7 @@ fn main() {
 			let file_path = f.path();
 			if file_path.is_file() {
 				if let Some(ext) = file_path.extension() {
-					if ext == "pb" || ext == "pbmm" {
+					if ext == "pb" || ext == "pbmm" || ext == "tflite" {
 						graph_name = file_path.into_boxed_path();
 					} else if ext == "scorer" {
 						scorer_name = Some(file_path.into_boxed_path());
