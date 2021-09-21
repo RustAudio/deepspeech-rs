@@ -215,7 +215,7 @@ impl From<u32> for DeepspeechError {
 }
 impl From<i32> for DeepspeechError {
 	fn from(code: i32) -> Self {
-		let code = code.abs();
+		let code = (code as i64).abs() as u32;
 		code.into()
 	}
 }
