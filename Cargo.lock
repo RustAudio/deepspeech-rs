@@ -216,7 +216,7 @@ dependencies = [
 
 [[package]]
 name = "deepspeech"
-version = "0.9.1"
+version = "0.9.0"
 dependencies = [
  "audrey",
  "dasp_interpolate",
