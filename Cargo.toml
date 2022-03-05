@@ -10,7 +10,6 @@ repository = "https://github.com/RustAudio/deepspeech-rs"
 version = "0.9.0"
 authors = ["est31 <MTest31@outlook.com>"]
 readme = "README.md"
-maintenance = { status = "deprecated" }
 
 [dev-dependencies]
 audrey = "0.3"
@@ -26,3 +25,6 @@ libloading = { version = "0.7", optional = true }
 default = ["static_bindings"]
 dynamic = ["libloading"]
 static_bindings = ["deepspeech-sys"]
+
+[badges]
+maintenance = { status = "deprecated" }

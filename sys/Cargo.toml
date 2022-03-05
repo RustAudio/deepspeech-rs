@@ -4,8 +4,11 @@ description = "Bindgen output for the DeepSpeech C++ API"
 license = "MPL-2.0"
 documentation = "https://docs.rs/deepspeech-sys"
 repository = "https://github.com/RustAudio/deepspeech-rs"
-version = "0.9.0"
+version = "0.9.1"
 authors = ["est31 <MTest31@outlook.com>"]
 
 include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]
+
+[badges]
+maintenance = { status = "deprecated" }
