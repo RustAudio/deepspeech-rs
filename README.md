@@ -27,7 +27,7 @@ All codecs that the awesome [audrey](https://github.com/RustAudio/audrey) librar
 
 See DeepSpeech's [release announcement] for more.
 
-[release announcement]: https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.0
+[release announcement]: https://github.com/mozilla/DeepSpeech/releases/latest
 
 ## Supported versions of DeepSpeech
 
