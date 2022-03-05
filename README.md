@@ -1,3 +1,8 @@
+# DEPRECATION NOTICE
+
+This project is [deprecated](https://github.com/RustAudio/deepspeech-rs/issues/48) in favour of [coqui-stt](https://github.com/tazz4843/coqui-stt).
+Please use that project instead.
+
 # deepspeech-rs
 
 [![docs](https://docs.rs/deepspeech/badge.svg)](https://docs.rs/crate/deepspeech)
